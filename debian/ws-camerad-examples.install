@@ -1,0 +1,5 @@
+usr/bin/still_client
+usr/bin/clip_client
+usr/bin/frame_consumer
+usr/bin/motion_clip
+usr/share/ws-camerad/examples/

@@ -1,0 +1,37 @@
+.TH CLIP_CLIENT 1 "February 2026" "ws-camerad 1.0.0" "User Commands"
+.SH NAME
+clip_client \- extract video clips from ws-camerad
+.SH SYNOPSIS
+.B clip_client
+[\fIstart_offset\fR] [\fIend_offset\fR] [\fIsocket_path\fR]
+.SH DESCRIPTION
+.B clip_client
+connects to the ws-camerad daemon and requests extraction of a video clip
+from the ring buffer.
+.PP
+Time offsets are specified in seconds relative to the current time.
+Negative values refer to the past (already recorded), positive values
+request continued recording into the future.
+.SH ARGUMENTS
+.TP
+.I start_offset
+Seconds before current time to start clip (default: -5)
+.TP
+.I end_offset
+Seconds after current time to end clip (default: 5)
+.TP
+.I socket_path
+Path to daemon control socket (default: /run/ws-camerad/control.sock)
+.SH EXAMPLES
+.TP
+Extract 10 seconds of video (5 seconds before and after now):
+.B clip_client -5 5
+.TP
+Extract last 30 seconds:
+.B clip_client -30 0
+.SH SEE ALSO
+.BR ws-camerad (8),
+.BR still_client (1),
+.BR frame_consumer (1)
+.SH AUTHOR
+Camera Daemon Contributors

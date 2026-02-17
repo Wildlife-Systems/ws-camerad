@@ -1,0 +1,28 @@
+.TH STILL_CLIENT 1 "February 2026" "ws-camerad 1.0.0" "User Commands"
+.SH NAME
+still_client \- capture still images from ws-camerad
+.SH SYNOPSIS
+.B still_client
+[\fIsocket_path\fR]
+.SH DESCRIPTION
+.B still_client
+connects to the ws-camerad daemon and requests capture of a still JPEG image.
+.PP
+The captured image is saved to the daemon's configured stills directory.
+.SH ARGUMENTS
+.TP
+.I socket_path
+Path to daemon control socket (default: /run/ws-camerad/control.sock)
+.SH EXAMPLES
+.TP
+Capture a still image:
+.B still_client
+.TP
+Using a custom socket:
+.B still_client /tmp/custom.sock
+.SH SEE ALSO
+.BR ws-camerad (8),
+.BR clip_client (1),
+.BR frame_consumer (1)
+.SH AUTHOR
+Camera Daemon Contributors

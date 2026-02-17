@@ -1,0 +1,36 @@
+.TH FRAME_CONSUMER 1 "February 2026" "ws-camerad 1.0.0" "User Commands"
+.SH NAME
+frame_consumer \- access raw video frames from ws-camerad shared memory
+.SH SYNOPSIS
+.B frame_consumer
+[\fIshm_name\fR]
+.SH DESCRIPTION
+.B frame_consumer
+demonstrates reading raw video frames from ws-camerad's shared memory interface.
+.PP
+Frames are provided in YUV420 or BGR24 format depending on the shared memory
+region accessed. This example prints frame metadata and timing statistics.
+.SH ARGUMENTS
+.TP
+.I shm_name
+Shared memory name (default: /ws_camerad_frames)
+.SH SHARED MEMORY REGIONS
+.TP
+.B /ws_camerad_frames
+YUV420 format frames
+.TP
+.B /ws_camerad_frames_bgr
+BGR24 format frames (if enabled)
+.SH EXAMPLES
+.TP
+Read YUV frames:
+.B frame_consumer /ws_camerad_frames
+.TP
+Read BGR frames:
+.B frame_consumer /ws_camerad_frames_bgr
+.SH SEE ALSO
+.BR ws-camerad (8),
+.BR still_client (1),
+.BR clip_client (1)
+.SH AUTHOR
+Camera Daemon Contributors

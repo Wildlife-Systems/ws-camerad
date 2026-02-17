@@ -1,0 +1,3 @@
+# Internal daemon headers - not part of public API
+# Use ws_camerad/client.hpp for client development
+usr/include/camera_daemon/*

@@ -1,0 +1,199 @@
+RingBufferTest.EmptyBufferStats 2 0.0233221
+RingBufferTest.PushSingleFrame 2 0.0239912
+RingBufferTest.PushMultipleFrames 2 0.0235479
+RingBufferTest.EvictsOldFrames 2 0.0248217
+RingBufferTest.ExtractLastSecondsEmpty 2 0.0233267
+RingBufferTest.ExtractLastSecondsWithData 2 0.0243096
+RingBufferTest.Clear 2 0.0228032
+RingBufferTest.ThreadSafety 2 0.0256086
+ResponseTest.OkResponse 2 0.0228048
+ResponseTest.OkResponseWithPath 2 0.0236188
+ResponseTest.OkResponseWithData 2 0.0240288
+ResponseTest.ErrorResponse 2 0.0244755
+ResponseTest.EscapeSpecialChars 2 0.0232731
+ResponseTest.ToStringFormat 2 0.0228181
+ResponseTest.SuccessFlag 2 0.0237767
+CommandTest.DefaultValues 2 0.0227958
+CommandTypeTest.EnumValues 2 0.0281282
+CommandTypeTest.AllTypesDistinct 2 0.02447
+FrameMetadataTest.DefaultValues 2 0.0240862
+FrameMetadataTest.SetValues 2 0.0232027
+EncodedFrameTest.Construction 2 0.0247339
+CameraConfigTest.DefaultValues 2 0.0235557
+DaemonConfigTest.DefaultValues 2 0.0241508
+PixelFormatTest.Constants 2 0.0243963
+VersionTest.Defined 2 0.0232817
+TimestampTest.GetTimestampUsReturnsReasonableValue 2 0.02485
+TimestampTest.GetTimestampUsIncreases 2 0.0245607
+TimestampTest.GetTimestampUsConsistent 2 0.0243158
+TimestampTest.FilenameFormat 2 0.0232998
+TimestampTest.FilenameLength 2 0.025568
+TimestampTest.FilenameUniqueness 2 0.0238022
+TimestampTest.FilenameContainsDate 2 0.0239427
+TimestampTest.FilenameContainsTime 2 0.0239591
+LoggerTest.LogsDebugWhenEnabled 2 0.0236096
+LoggerTest.LogsInfo 2 0.024826
+LoggerTest.LogsWarn 2 0.0226849
+LoggerTest.LogsError 2 0.0238436
+LoggerTest.FiltersByLevel 2 0.0227962
+LoggerTest.LogsMultipleArgs 2 0.0267689
+LoggerTest.IncludesSourceFile 2 0.0238403
+LoggerTest.IncludesTimestamp 2 0.0236973
+SharedMemoryTest.CreateAndMap 2 0.0245317
+SharedMemoryTest.WriteAndRead 2 0.023595
+SharedMemoryTest.UnlinkRemovesShm 2 0.0247688
+SharedMemoryTest.MoveConstruction 2 0.0222321
+SharedMemoryTest.MoveAssignment 2 0.0233571
+FramePublisherHeaderTest.Size 2 0.0234804
+FramePublisherHeaderTest.AtomicSequence 2 0.0233704
+ConfigTest.DefaultsWhenFileNotFound 2 0.0250897
+ConfigTest.ParsesDaemonSection 2 0.0229603
+ConfigTest.ParsesCameraSection 2 0.0248925
+ConfigTest.IgnoresComments 2 0.0236653
+ConfigTest.IgnoresEmptyLines 2 0.0259557
+ConfigTest.TrimsWhitespace 2 0.0232821
+ConfigTest.ParsesBooleans 2 0.0261039
+ConfigTest.HandlesInvalidLines 2 0.0238711
+ConfigTest.HandlesUnknownKeys 2 0.0260773
+ConfigTest.ParsesShmNames 2 0.0232539
+ConfigTest.DefaultSectionWithoutHeader 2 0.024482
+StillCaptureConfigTest.DefaultValues 2 0.0234536
+StillCaptureConfigTest.CustomValues 2 0.0251753
+StillCaptureStatsTest.DefaultValues 2 0.0223379
+StillCaptureStatsTest.SetValues 2 0.0226965
+ClipExtractorConfigTest.DefaultValues 2 0.0241202
+ClipExtractorConfigTest.CustomValues 2 0.0225243
+ClipExtractorStatsTest.DefaultValues 2 0.0244006
+ClipExtractorStatsTest.SetValues 2 0.0242054
+ClipRequestTest.DefaultValues 2 0.0248559
+ClipRequestTest.SetValues 2 0.0243411
+V4L2EncoderConfigTest.DefaultCodec 2 0.0233511
+V4L2EncoderConfigTest.SetValues 2 0.0249458
+V4L2EncoderCodecTest.EnumValues 2 0.0232073
+V4L2EncoderStatsTest.DefaultValues 2 0.0225717
+V4L2EncoderStatsTest.SetValues 2 0.0238712
+V4L2JpegConfigTest.DefaultValues 2 0.0231122
+V4L2JpegConfigTest.QualityRange 2 0.0257642
+V4L2JpegConfigTest.CustomValues 2 0.0232269
+ControlClientTest.DefaultSocketPath 2 0.0238955
+ControlClientTest.CustomSocketPath 2 0.0279619
+ControlClientTest.ConnectToNonexistentSocket 2 0.0291262
+ControlClientTest.DoubleDisconnect 2 0.025748
+ControlSocketTest.ConstructDestruct 2 0.0327687
+ControlSocketTest.StartStop 2 0.0387398
+ControlSocketTest.DoubleStart 2 0.0340806
+ControlSocketTest.DoubleStop 2 0.0348117
+ControlSocketTest.ClientCountZeroInitially 2 0.0284151
+ControlSocketTest.SetHandlers 2 0.0348449
+ControlSocketTest.ClientServerInteraction 2 0.033719
+ControlSocketTest.StillCommand 2 0.0309969
+ControlSocketTest.ClipCommand 2 0.0331359
+ControlSocketTest.SetCommand 2 0.0450676
+ControlSocketTest.InvalidCommand 2 0.0272858
+ControlSocketTest.QuitCommand 2 0.040316
+ControlSocketTest.CaseInsensitiveCommands 2 0.0540755
+StillCaptureIntegrationTest.StartStop 2 0.0474102
+StillCaptureIntegrationTest.DoubleStartStop 2 0.0431339
+StillCaptureIntegrationTest.RequestCaptureReturnsUniqueIds 2 0.0395506
+StillCaptureIntegrationTest.StatsTracksRequests 2 0.0504822
+StillCaptureIntegrationTest.CaptureProducesJpegFile 2 0.0641204
+StillCaptureIntegrationTest.MultipleCaptures 2 0.145833
+StillCaptureIntegrationTest.WaitTimeoutOnNoFrame 2 0.283669
+StillCaptureIntegrationTest.HardwareJpegIfAvailable 2 0.0472434
+ClipExtractorIntegrationTest.StartStop 2 0.0232729
+ClipExtractorIntegrationTest.RequestClipReturnsUniqueIds 2 0.0268207
+ClipExtractorIntegrationTest.StatsTracksRequests 2 0.0243518
+ClipExtractorIntegrationTest.AddFrameToRingBuffer 2 0.0249883
+ClipExtractorIntegrationTest.ExtractClipWithPreEventFrames 2 0.0341666
+ClipExtractorIntegrationTest.ExtractClipWithPostEvent 2 1.1869
+ClipExtractorIntegrationTest.ConcurrentPreEventClips 2 0.0379168
+ClipExtractorIntegrationTest.ConcurrentPostEventClips 2 2.76425
+ClipExtractorIntegrationTest.ConcurrentClipsDontBlock 2 2.68196
+ClipExtractorIntegrationTest.PreSecondsClampedToBufferCapacity 2 0.03571
+ClipExtractorIntegrationTest.BufferStillFilling 2 0.0261332
+VirtualCameraConfigTest.ZeroVirtualCamerasWhenNotConfigured 2 0.024984
+VirtualCameraConfigTest.ParsesSingleVirtualCamera 2 0.0239241
+VirtualCameraConfigTest.ParsesMultipleVirtualCameras 2 0.0255897
+VirtualCameraConfigTest.VirtualCameraSectionWithoutIndex 2 0.0232848
+VirtualCameraConfigTest.DefaultEnabledWhenNotSpecified 2 0.0245315
+VirtualCameraConfigTest.MixedWithOtherSections 2 0.0251591
+V4L2LoopbackOutputTest.IsAvailableReturnsCorrectly 2 0.0247019
+V4L2LoopbackOutputTest.FindLoopbackDevicesReturnsVector 2 0.0227244
+V4L2LoopbackOutputTest.InitializeFailsOnNonexistentDevice 2 0.0239328
+V4L2LoopbackOutputTest.CloseIsIdempotent 2 0.0255269
+V4L2LoopbackOutputTest.StatsStartAtZero 2 0.0253136
+V4L2LoopbackOutputTest.WriteFrameFailsWhenNotOpen 2 0.0234181
+YUV420ToYUYVConversionTest.SmallFrameConversion 2 0.0233001
+YUV420ToYUYVConversionTest.FrameSizeCalculations 2 0.0238463
+V4L2LoopbackHardwareTest.InitializeWithRealDevice 1 0
+V4L2LoopbackHardwareTest.WriteFrameToRealDevice 1 0
+V4L2LoopbackHardwareTest.WriteMultipleFrames 1 0
+VirtualCameraConfigStructTest.DefaultValues 2 0.0266602
+VirtualCameraConfigStructTest.Assignment 2 0.0242242
+FrameRotatorTest.DimensionsSwapFor90Degrees 2 0.0260989
+FrameRotatorTest.DimensionsSwapFor270Degrees 2 0.0255334
+FrameRotatorTest.RotatedFrameSizeCorrect 2 0.0243981
+FrameRotatorTest.Rotate90ClockwiseMovesTopLeftToTopRight 2 0.0234018
+FrameRotatorTest.Rotate270ClockwiseMovesTopLeftToBottomLeft 2 0.0238619
+FrameRotatorTest.DoubleRotation180Preserves 2 0.0247554
+FrameRotatorTest.LargeFrameRotation 2 0.0291373
+VirtualCameraRotationTest.RotatedFrameWrittenToLoopback 1 0
+VirtualCameraRotationTest.MultipleRotatedFrames 1 0
+RotationCorrectnessTest.SinglePixelRotation90 2 0.0238239
+RotationCorrectnessTest.SinglePixelRotation270 2 0.0243371
+V4L2JpegEncoderTest.IsAvailableReturnsConsistentResult 2 0.0239267
+V4L2JpegEncoderTest.InitializeWithValidConfig 2 0.028639
+V4L2JpegEncoderTest.InitializeWithDifferentResolutions 2 0.0384549
+V4L2JpegEncoderTest.EncodeValidYUVData 2 0.0389025
+V4L2JpegEncoderTest.EncodeMultipleFrames 2 0.0481817
+V4L2JpegEncoderTest.QualityAffectsSize 2 0.0566752
+V4L2EncoderTest.DeviceExists 2 0.02439
+V4L2EncoderTest.InitializeWithValidConfig 2 0.0297846
+V4L2EncoderTest.InitializeWithDifferentBitrates 2 0.03328
+V4L2EncoderTest.StartStop 2 0.0839319
+V4L2EncoderTest.DoubleStart 2 0.0825874
+V4L2EncoderTest.StatsInitiallyZero 2 0.0286829
+V4L2EncoderTest.ForceKeyframe 2 0.0796441
+V4L2EncoderTest.SetOutputCallback 2 0.0267489
+V4L2EncoderTest.DestructorCleansUp 2 0.086722
+CameraManagerIntegrationTest.InitializeDetectsCamera 1 0
+CameraManagerIntegrationTest.ConfigureWithDefaults 1 0
+CameraManagerIntegrationTest.StartStopCapture 1 0
+CameraManagerIntegrationTest.ReceivesFrames 1 0
+CameraManagerIntegrationTest.ProvidesDmabufFd 1 0
+CapturePipelineIntegrationTest.Initialize 1 0
+CapturePipelineIntegrationTest.StartStop 1 0
+CapturePipelineIntegrationTest.CapturesFrames 1 0
+CapturePipelineIntegrationTest.CaptureStill 1 0
+CapturePipelineIntegrationTest.CaptureMultipleStills 1 0
+CapturePipelineIntegrationTest.CaptureClip 1 0
+CapturePipelineIntegrationTest.GetStatus 1 0
+CapturePipelineIntegrationTest.WithBgrSharing 1 0
+CapturePipelineIntegrationTest.StressTestMultipleStills 1 0
+CapturePipelineIntegrationTest.LongRunningCapture 1 0
+RTSPServerIntegrationTest.StartStop 2 0.0981085
+RTSPServerIntegrationTest.PushFrames 2 0.0376015
+RTSPServerIntegrationTest.FullPipelineWithRTSP 1 0
+DaemonIntegrationTests 2 0.108019
+---
+V4L2LoopbackHardwareTest.InitializeWithRealDevice
+V4L2LoopbackHardwareTest.WriteFrameToRealDevice
+V4L2LoopbackHardwareTest.WriteMultipleFrames
+VirtualCameraRotationTest.RotatedFrameWrittenToLoopback
+VirtualCameraRotationTest.MultipleRotatedFrames
+CameraManagerIntegrationTest.InitializeDetectsCamera
+CameraManagerIntegrationTest.ConfigureWithDefaults
+CameraManagerIntegrationTest.StartStopCapture
+CameraManagerIntegrationTest.ReceivesFrames
+CameraManagerIntegrationTest.ProvidesDmabufFd
+CapturePipelineIntegrationTest.Initialize
+CapturePipelineIntegrationTest.StartStop
+CapturePipelineIntegrationTest.CapturesFrames
+CapturePipelineIntegrationTest.CaptureStill
+CapturePipelineIntegrationTest.CaptureMultipleStills
+CapturePipelineIntegrationTest.CaptureClip
+CapturePipelineIntegrationTest.GetStatus
+CapturePipelineIntegrationTest.WithBgrSharing
+CapturePipelineIntegrationTest.StressTestMultipleStills
+CapturePipelineIntegrationTest.LongRunningCapture
+RTSPServerIntegrationTest.FullPipelineWithRTSP

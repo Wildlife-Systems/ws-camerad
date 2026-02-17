@@ -1,0 +1,12 @@
+ws-camerad (1.0.0) unstable; urgency=medium
+
+  * Initial release
+  * High-performance multi-consumer camera daemon
+  * V4L2 M2M hardware H.264 encoding
+  * GStreamer RTSP streaming server
+  * Shared memory frame distribution (YUV420/BGR)
+  * Ring buffer for pre-event clip recording
+  * Still capture with JPEG compression
+  * Unix socket control interface
+
+ -- Ed Baker <ed@ebaker.me.uk>  Fri, 06 Feb 2026 12:00:00 +0000

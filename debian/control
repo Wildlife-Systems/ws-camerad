@@ -1,0 +1,94 @@
+Source: ws-camerad
+Section: video
+Priority: optional
+Maintainer: Camera Daemon Contributors <camera-daemon@example.com>
+Build-Depends: debhelper-compat (= 13),
+               cmake (>= 3.16),
+               pkg-config,
+               libcamera-dev,
+               libjpeg-dev,
+               libgstreamer1.0-dev,
+               libgstreamer-plugins-base1.0-dev,
+               gstreamer1.0-rtsp,
+               dh-python
+Standards-Version: 4.6.2
+Homepage: https://github.com/your-org/ws-camerad
+Rules-Requires-Root: no
+
+Package: ws-camerad
+Architecture: any
+Depends: ${shlibs:Depends},
+         ${misc:Depends},
+         libcamera0.2 | libcamera0.3 | libcamera0.5,
+         libjpeg62-turbo | libjpeg9,
+         gstreamer1.0-plugins-base,
+         gstreamer1.0-plugins-good,
+         gstreamer1.0-rtsp
+Recommends: python3
+Description: High-performance camera daemon for Raspberry Pi
+ ws-camerad is a high-performance multi-consumer camera daemon designed
+ for Raspberry Pi with libcamera. It provides:
+ .
+  * Continuous H.264 hardware encoding via V4L2 M2M
+  * Ring buffer for pre-event recording
+  * RTSP streaming server
+  * Shared memory frame distribution (YUV420 and BGR)
+  * Still image capture (JPEG)
+  * Video clip extraction
+  * Unix socket control interface
+ .
+ Optimized for low-latency, high-throughput camera applications with
+ multiple simultaneous consumers.
+
+Package: ws-camerad-examples
+Architecture: any
+Depends: ${shlibs:Depends},
+         ${misc:Depends},
+         ws-camerad (= ${binary:Version})
+Recommends: python3-opencv,
+            python3-numpy,
+            python3-ws-camerad
+Description: Example clients for ws-camerad
+ Example client applications demonstrating ws-camerad usage:
+ .
+  * still_client - Capture still images
+  * clip_client - Extract video clips
+  * frame_consumer - Access raw frames via shared memory
+  * Python client library and examples
+
+Package: python3-ws-camerad
+Architecture: all
+Depends: ${misc:Depends},
+         python3 (>= 3.9)
+Recommends: python3-numpy
+Suggests: ws-camerad
+Description: Python client library for ws-camerad
+ Python module for communicating with the ws-camerad camera daemon.
+ .
+ Features:
+  * CameraClient - Control interface for still/clip capture
+  * FrameSubscriber - Shared memory frame access
+  * Response - JSON response parsing
+ .
+ Example usage:
+  from ws_camerad import CameraClient, capture_still, capture_clip
+  path = capture_still()
+  path = capture_clip(-5, 5)
+
+Package: ws-camerad-dev
+Architecture: all
+Depends: ${misc:Depends}
+Suggests: ws-camerad
+Description: C++ development headers for ws-camerad
+ Header-only C++ client library for the ws-camerad camera daemon.
+ .
+ Features:
+  * ws_camerad::Client - Control socket client for still/clip capture
+  * ws_camerad::FrameReader - Shared memory frame access
+  * ws_camerad::Response - JSON response parsing
+ .
+ Example usage:
+  #include <ws_camerad/client.hpp>
+  ws_camerad::Client client;
+  auto response = client.capture_still();
+  auto response = client.capture_clip(-5, 5);

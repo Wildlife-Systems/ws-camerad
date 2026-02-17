@@ -1,0 +1,1 @@
+/usr/bin/c++ -O3 -DNDEBUG CMakeFiles/still_client.dir/examples/still_client.cpp.o -o still_client 

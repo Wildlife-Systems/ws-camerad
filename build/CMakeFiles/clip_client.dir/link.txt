@@ -1,0 +1,1 @@
+/usr/bin/c++ -O3 -DNDEBUG CMakeFiles/clip_client.dir/examples/clip_client.cpp.o -o clip_client 

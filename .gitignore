@@ -1,0 +1,14 @@
+report.md
+examples/bench_motion.cpp
+examples/bench_motion.py
+build/bench_motion
+obj-aarch64-linux-gnu/
+debian/files
+debian/*.debhelper
+debian/*.debhelper.log
+debian/*.substvars
+debian/tmp/
+debian/ws-camerad/
+debian/ws-camerad-dev/
+debian/ws-camerad-examples/
+debian/python3-ws-camerad/

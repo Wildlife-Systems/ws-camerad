@@ -1,0 +1,132 @@
+.TH WS-CAMERAD 8 "February 2026" "ws-camerad 1.0.0" "System Administration"
+.SH NAME
+ws-camerad \- high-performance multi-consumer camera daemon
+.SH SYNOPSIS
+.B ws-camerad
+.RB [ \-c
+.IR config-file ]
+.RB [ \-d ]
+.RB [ \-h ]
+.SH DESCRIPTION
+.B ws-camerad
+is a high-performance camera daemon designed for Raspberry Pi with libcamera.
+It provides continuous H.264 hardware encoding, RTSP streaming, shared memory
+frame distribution, still image capture, and video clip extraction.
+.PP
+The daemon supports multiple simultaneous consumers through shared memory
+(for raw YUV420 and BGR frames) and RTSP streaming (for H.264 video).
+.SH OPTIONS
+.TP
+.BI \-c " config-file"
+Use the specified configuration file instead of the default
+.IR /etc/ws/camerad/ws-camerad.conf .
+.TP
+.B \-d
+Run in debug mode with verbose logging.
+.TP
+.B \-h
+Display help message and exit.
+.SH CONTROL INTERFACE
+The daemon listens on a Unix domain socket (default:
+.IR /run/ws-camerad/control.sock )
+for control commands.
+.PP
+Supported commands:
+.TP
+.B GET STATUS
+Returns JSON status with frame counts, FPS, buffer usage, etc.
+.TP
+.B STILL
+Capture a JPEG still image.
+.TP
+.BI "CLIP " seconds
+Extract a video clip of the specified duration from the ring buffer.
+.TP
+.BI "SET " "parameter value"
+Set a camera control parameter (e.g., SET brightness 0.2).
+.SH CAMERA CONTROLS
+Supported camera controls:
+.TP
+.B brightness
+Range: -1.0 to 1.0 (0.0 = normal)
+.TP
+.B contrast
+Range: 0.0 to 32.0 (1.0 = normal)
+.TP
+.B saturation
+Range: 0.0 to 32.0 (1.0 = normal)
+.TP
+.B sharpness
+Range: 0.0 to 16.0 (1.0 = normal)
+.TP
+.B ae_enable
+Boolean: 0 = manual exposure, 1 = auto exposure
+.TP
+.B awb_enable
+Boolean: 0 = manual white balance, 1 = auto white balance
+.TP
+.B exposure_time
+Exposure time in microseconds (when ae_enable = 0)
+.TP
+.B gain
+Analogue gain value (when ae_enable = 0)
+.SH FILES
+.TP
+.I /etc/ws/camerad/ws-camerad.conf
+Default configuration file.
+.TP
+.I /run/ws-camerad/control.sock
+Control socket for client communication.
+.TP
+.I /var/lib/ws-camerad/stills/
+Directory for captured still images.
+.TP
+.I /var/lib/ws-camerad/clips/
+Directory for extracted video clips.
+.SH SHARED MEMORY
+The daemon creates POSIX shared memory segments for frame distribution:
+.TP
+.I /ws_camerad_frames
+Raw YUV420 frames from libcamera.
+.TP
+.I /ws_camerad_frames_bgr
+BGR24 frames converted for OpenCV consumers.
+.SH RTSP STREAMING
+When RTSP is enabled, the daemon streams H.264 video at:
+.PP
+.RS
+rtsp://\fIhostname\fP:8554/camera
+.RE
+.SH EXIT STATUS
+.B ws-camerad
+returns 0 on success, non-zero on error.
+.SH EXAMPLES
+Start with default configuration:
+.PP
+.RS
+.B ws-camerad
+.RE
+.PP
+Start with custom configuration:
+.PP
+.RS
+.B ws-camerad -c /path/to/config.conf
+.RE
+.PP
+Capture a still image via Python:
+.PP
+.RS
+from ws_camerad import CameraClient
+.br
+c = CameraClient()
+.br
+c.capture_still()
+.RE
+.SH SEE ALSO
+.BR libcamera (7),
+.BR v4l2-ctl (1),
+.BR gst-launch-1.0 (1)
+.SH AUTHORS
+Camera Daemon Contributors
+.SH BUGS
+Report bugs at https://github.com/your-org/ws-camerad/issues

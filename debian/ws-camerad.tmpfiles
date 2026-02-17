@@ -1,0 +1,2 @@
+# Create runtime directory for ws-camerad
+d /run/ws-camerad 0755 root root -

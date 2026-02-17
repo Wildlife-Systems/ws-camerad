@@ -1,0 +1,39 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ws-camerad"
+version = "1.0.0"
+description = "Python client library for ws-camerad camera daemon"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.9"
+authors = [
+    {name = "Camera Daemon Contributors", email = "camera-daemon@example.com"}
+]
+keywords = ["camera", "daemon", "raspberry-pi", "libcamera", "video"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Multimedia :: Video :: Capture",
+]
+
+[project.optional-dependencies]
+frames = ["numpy"]
+all = ["numpy"]
+
+[project.urls]
+Homepage = "https://github.com/your-org/ws-camerad"
+Repository = "https://github.com/your-org/ws-camerad"
+Documentation = "https://github.com/your-org/ws-camerad#readme"
+
+[tool.setuptools.packages.find]
+where = ["."]

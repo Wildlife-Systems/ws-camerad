@@ -1,0 +1,12 @@
+/home/edwab/ws-camera-d/build/CMakeFiles/camera_core.dir
+/home/edwab/ws-camera-d/build/CMakeFiles/ws-camerad.dir
+/home/edwab/ws-camera-d/build/CMakeFiles/still_client.dir
+/home/edwab/ws-camera-d/build/CMakeFiles/clip_client.dir
+/home/edwab/ws-camera-d/build/CMakeFiles/frame_consumer.dir
+/home/edwab/ws-camera-d/build/CMakeFiles/motion_clip.dir
+/home/edwab/ws-camera-d/build/CMakeFiles/edit_cache.dir
+/home/edwab/ws-camera-d/build/CMakeFiles/rebuild_cache.dir
+/home/edwab/ws-camera-d/build/CMakeFiles/list_install_components.dir
+/home/edwab/ws-camera-d/build/CMakeFiles/install.dir
+/home/edwab/ws-camera-d/build/CMakeFiles/install/local.dir
+/home/edwab/ws-camera-d/build/CMakeFiles/install/strip.dir
