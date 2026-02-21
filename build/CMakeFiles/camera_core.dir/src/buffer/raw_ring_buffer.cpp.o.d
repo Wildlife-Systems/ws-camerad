@@ -1,5 +1,7 @@
-CMakeFiles/camera_core.dir/src/utils/config.cpp.o: \
- /home/edwab/ws-camera-d/src/utils/config.cpp /usr/include/stdc-predef.h \
+CMakeFiles/camera_core.dir/src/buffer/raw_ring_buffer.cpp.o: \
+ /home/edwab/ws-camera-d/src/buffer/raw_ring_buffer.cpp \
+ /usr/include/stdc-predef.h \
+ /home/edwab/ws-camera-d/include/camera_daemon/raw_ring_buffer.hpp \
  /home/edwab/ws-camera-d/include/camera_daemon/common.hpp \
  /usr/include/c++/12/cstdint \
  /usr/include/aarch64-linux-gnu/c++/12/bits/c++config.h \
@@ -169,143 +171,55 @@ CMakeFiles/camera_core.dir/src/utils/config.cpp.o: \
  /usr/include/c++/12/bits/algorithmfwd.h \
  /usr/include/c++/12/bits/stl_heap.h \
  /usr/include/c++/12/bits/uniform_int_dist.h /usr/include/c++/12/atomic \
- /home/edwab/ws-camera-d/include/camera_daemon/daemon.hpp \
- /home/edwab/ws-camera-d/include/camera_daemon/capture_pipeline.hpp \
- /home/edwab/ws-camera-d/include/camera_daemon/camera_manager.hpp \
- /usr/include/libcamera/libcamera/libcamera.h \
- /usr/include/libcamera/libcamera/camera.h /usr/include/c++/12/optional \
- /usr/include/c++/12/set /usr/include/c++/12/bits/stl_tree.h \
- /usr/include/c++/12/bits/stl_set.h \
- /usr/include/c++/12/bits/stl_multiset.h \
- /usr/include/libcamera/libcamera/base/class.h \
- /usr/include/libcamera/libcamera/base/flags.h \
- /usr/include/libcamera/libcamera/base/object.h /usr/include/c++/12/list \
- /usr/include/c++/12/bits/stl_list.h /usr/include/c++/12/bits/list.tcc \
- /usr/include/c++/12/utility /usr/include/c++/12/bits/stl_relops.h \
- /usr/include/libcamera/libcamera/base/bound_method.h \
- /usr/include/libcamera/libcamera/base/signal.h \
- /usr/include/libcamera/libcamera/controls.h /usr/include/assert.h \
- /usr/include/c++/12/map /usr/include/c++/12/bits/stl_map.h \
- /usr/include/c++/12/bits/stl_multimap.h \
- /usr/include/libcamera/libcamera/base/span.h \
- /usr/include/c++/12/iterator /usr/include/c++/12/bits/stream_iterator.h \
- /usr/include/c++/12/bits/streambuf_iterator.h \
- /usr/include/c++/12/streambuf /usr/include/c++/12/bits/ios_base.h \
+ /usr/include/c++/12/mutex /usr/include/c++/12/system_error \
+ /usr/include/aarch64-linux-gnu/c++/12/bits/error_constants.h \
+ /usr/include/c++/12/stdexcept /usr/include/c++/12/bits/std_mutex.h \
+ /usr/include/c++/12/bits/unique_lock.h /usr/include/c++/12/cstring \
+ /usr/include/string.h /usr/include/strings.h \
+ /home/edwab/ws-camera-d/include/camera_daemon/logger.hpp \
+ /usr/include/c++/12/iostream /usr/include/c++/12/ostream \
+ /usr/include/c++/12/ios /usr/include/c++/12/bits/ios_base.h \
  /usr/include/c++/12/bits/locale_classes.h \
  /usr/include/c++/12/bits/locale_classes.tcc \
- /usr/include/c++/12/system_error \
- /usr/include/aarch64-linux-gnu/c++/12/bits/error_constants.h \
- /usr/include/c++/12/stdexcept /usr/include/c++/12/bits/streambuf.tcc \
- /usr/include/libcamera/libcamera/geometry.h \
- /usr/include/c++/12/algorithm \
- /usr/include/c++/12/pstl/glue_algorithm_defs.h \
- /usr/include/c++/12/ostream /usr/include/c++/12/ios \
+ /usr/include/c++/12/streambuf /usr/include/c++/12/bits/streambuf.tcc \
  /usr/include/c++/12/bits/basic_ios.h \
  /usr/include/c++/12/bits/locale_facets.h /usr/include/c++/12/cwctype \
  /usr/include/wctype.h /usr/include/aarch64-linux-gnu/bits/wctype-wchar.h \
  /usr/include/aarch64-linux-gnu/c++/12/bits/ctype_base.h \
+ /usr/include/c++/12/bits/streambuf_iterator.h \
  /usr/include/aarch64-linux-gnu/c++/12/bits/ctype_inline.h \
  /usr/include/c++/12/bits/locale_facets.tcc \
  /usr/include/c++/12/bits/basic_ios.tcc \
- /usr/include/c++/12/bits/ostream.tcc \
- /usr/include/libcamera/libcamera/orientation.h \
- /usr/include/c++/12/iostream /usr/include/c++/12/istream \
- /usr/include/c++/12/bits/istream.tcc \
- /usr/include/libcamera/libcamera/request.h \
- /usr/include/libcamera/libcamera/fence.h \
- /usr/include/libcamera/libcamera/base/unique_fd.h \
- /usr/include/libcamera/libcamera/stream.h \
- /usr/include/libcamera/libcamera/color_space.h \
- /usr/include/libcamera/libcamera/framebuffer.h \
- /usr/include/libcamera/libcamera/base/shared_fd.h \
- /usr/include/libcamera/libcamera/pixel_format.h \
- /usr/include/libcamera/libcamera/camera_manager.h \
- /usr/include/libcamera/libcamera/control_ids.h \
- /usr/include/libcamera/libcamera/formats.h \
- /usr/include/libcamera/libcamera/framebuffer_allocator.h \
- /usr/include/libcamera/libcamera/logging.h \
- /usr/include/libcamera/libcamera/property_ids.h \
- /usr/include/libcamera/libcamera/transform.h \
- /usr/include/libcamera/libcamera/version.h /usr/include/c++/12/thread \
- /usr/include/c++/12/bits/std_thread.h \
- /usr/include/c++/12/bits/this_thread_sleep.h /usr/include/c++/12/mutex \
- /usr/include/c++/12/bits/std_mutex.h \
- /usr/include/c++/12/bits/unique_lock.h \
- /usr/include/c++/12/condition_variable /usr/include/c++/12/queue \
- /usr/include/c++/12/deque /usr/include/c++/12/bits/stl_deque.h \
- /usr/include/c++/12/bits/deque.tcc /usr/include/c++/12/bits/stl_queue.h \
- /home/edwab/ws-camera-d/include/camera_daemon/v4l2_encoder.hpp \
- /usr/include/linux/videodev2.h /usr/include/aarch64-linux-gnu/sys/time.h \
- /usr/include/linux/ioctl.h /usr/lib/linux/uapi/arm64/asm/ioctl.h \
- /usr/include/asm-generic/ioctl.h /usr/include/linux/types.h \
- /usr/lib/linux/uapi/arm64/asm/types.h /usr/include/asm-generic/types.h \
- /usr/include/asm-generic/int-ll64.h \
- /usr/lib/linux/uapi/arm64/asm/bitsperlong.h \
- /usr/include/asm-generic/bitsperlong.h /usr/include/linux/posix_types.h \
- /usr/include/linux/stddef.h /usr/lib/linux/uapi/arm64/asm/posix_types.h \
- /usr/include/asm-generic/posix_types.h /usr/include/linux/v4l2-common.h \
- /usr/include/linux/v4l2-controls.h /usr/include/linux/const.h \
- /home/edwab/ws-camera-d/include/camera_daemon/ring_buffer.hpp \
- /home/edwab/ws-camera-d/include/camera_daemon/raw_ring_buffer.hpp \
- /usr/include/c++/12/cstring /usr/include/string.h /usr/include/strings.h \
- /home/edwab/ws-camera-d/include/camera_daemon/shared_memory.hpp \
- /home/edwab/ws-camera-d/include/camera_daemon/frame_notifier.hpp \
- /home/edwab/ws-camera-d/include/camera_daemon/still_capture.hpp \
- /home/edwab/ws-camera-d/include/camera_daemon/v4l2_jpeg.hpp \
- /usr/include/c++/12/cstddef \
- /home/edwab/ws-camera-d/include/camera_daemon/clip_extractor.hpp \
- /home/edwab/ws-camera-d/include/camera_daemon/rtsp_server.hpp \
- /home/edwab/ws-camera-d/include/camera_daemon/frame_rotator.hpp \
- /home/edwab/ws-camera-d/include/camera_daemon/v4l2_loopback.hpp \
- /home/edwab/ws-camera-d/include/camera_daemon/control_socket.hpp \
- /usr/include/c++/12/csignal /usr/include/signal.h \
- /usr/include/aarch64-linux-gnu/bits/signum-generic.h \
- /usr/include/aarch64-linux-gnu/bits/signum-arch.h \
- /usr/include/aarch64-linux-gnu/bits/types/sig_atomic_t.h \
- /usr/include/aarch64-linux-gnu/bits/types/siginfo_t.h \
- /usr/include/aarch64-linux-gnu/bits/types/__sigval_t.h \
- /usr/include/aarch64-linux-gnu/bits/siginfo-arch.h \
- /usr/include/aarch64-linux-gnu/bits/siginfo-consts.h \
- /usr/include/aarch64-linux-gnu/bits/siginfo-consts-arch.h \
- /usr/include/aarch64-linux-gnu/bits/types/sigval_t.h \
- /usr/include/aarch64-linux-gnu/bits/types/sigevent_t.h \
- /usr/include/aarch64-linux-gnu/bits/sigevent-consts.h \
- /usr/include/aarch64-linux-gnu/bits/sigaction.h \
- /usr/include/aarch64-linux-gnu/bits/sigcontext.h \
- /usr/lib/linux/uapi/arm64/asm/sigcontext.h \
- /usr/lib/linux/uapi/arm64/asm/sve_context.h \
- /usr/include/aarch64-linux-gnu/bits/types/stack_t.h \
- /usr/include/aarch64-linux-gnu/sys/ucontext.h \
- /usr/include/aarch64-linux-gnu/sys/procfs.h \
- /usr/include/aarch64-linux-gnu/sys/user.h \
- /usr/include/aarch64-linux-gnu/bits/procfs.h \
- /usr/include/aarch64-linux-gnu/bits/procfs-id.h \
- /usr/include/aarch64-linux-gnu/bits/procfs-prregset.h \
- /usr/include/aarch64-linux-gnu/bits/procfs-extra.h \
- /usr/include/aarch64-linux-gnu/bits/sigstack.h \
- /usr/include/aarch64-linux-gnu/bits/sigstksz.h /usr/include/unistd.h \
- /usr/include/aarch64-linux-gnu/bits/posix_opt.h \
- /usr/include/aarch64-linux-gnu/bits/environments.h \
- /usr/include/aarch64-linux-gnu/bits/confname.h \
- /usr/include/aarch64-linux-gnu/bits/getopt_posix.h \
- /usr/include/aarch64-linux-gnu/bits/getopt_core.h \
- /usr/include/aarch64-linux-gnu/bits/unistd_ext.h \
- /usr/include/linux/close_range.h \
- /usr/include/aarch64-linux-gnu/bits/ss_flags.h \
- /usr/include/aarch64-linux-gnu/bits/types/struct_sigstack.h \
- /usr/include/aarch64-linux-gnu/bits/sigthread.h \
- /usr/include/aarch64-linux-gnu/bits/signal_ext.h \
- /home/edwab/ws-camera-d/include/camera_daemon/logger.hpp \
- /usr/include/c++/12/sstream /usr/include/c++/12/bits/sstream.tcc \
- /usr/include/c++/12/iomanip /usr/include/c++/12/locale \
+ /usr/include/c++/12/bits/ostream.tcc /usr/include/c++/12/istream \
+ /usr/include/c++/12/bits/istream.tcc /usr/include/c++/12/sstream \
+ /usr/include/c++/12/bits/sstream.tcc /usr/include/c++/12/iomanip \
+ /usr/include/c++/12/locale \
  /usr/include/c++/12/bits/locale_facets_nonio.h \
  /usr/include/aarch64-linux-gnu/c++/12/bits/time_members.h \
  /usr/include/aarch64-linux-gnu/c++/12/bits/messages_members.h \
  /usr/include/libintl.h /usr/include/c++/12/bits/codecvt.h \
  /usr/include/c++/12/bits/locale_facets_nonio.tcc \
  /usr/include/c++/12/bits/locale_conv.h \
- /usr/include/c++/12/bits/quoted_string.h /usr/include/c++/12/fstream \
- /usr/include/aarch64-linux-gnu/c++/12/bits/basic_file.h \
- /usr/include/aarch64-linux-gnu/c++/12/bits/c++io.h \
- /usr/include/c++/12/bits/fstream.tcc /usr/include/getopt.h \
- /usr/include/aarch64-linux-gnu/bits/getopt_ext.h
+ /usr/include/c++/12/bits/quoted_string.h /usr/include/c++/12/algorithm \
+ /usr/include/c++/12/pstl/glue_algorithm_defs.h /usr/include/c++/12/cmath \
+ /usr/include/math.h /usr/include/aarch64-linux-gnu/bits/math-vector.h \
+ /usr/include/aarch64-linux-gnu/bits/libm-simd-decl-stubs.h \
+ /usr/include/aarch64-linux-gnu/bits/flt-eval-method.h \
+ /usr/include/aarch64-linux-gnu/bits/fp-logb.h \
+ /usr/include/aarch64-linux-gnu/bits/fp-fast.h \
+ /usr/include/aarch64-linux-gnu/bits/mathcalls-helper-functions.h \
+ /usr/include/aarch64-linux-gnu/bits/mathcalls.h \
+ /usr/include/aarch64-linux-gnu/bits/mathcalls-narrow.h \
+ /usr/include/aarch64-linux-gnu/bits/iscanonical.h \
+ /usr/include/c++/12/bits/specfun.h /usr/include/c++/12/tr1/gamma.tcc \
+ /usr/include/c++/12/tr1/special_function_util.h \
+ /usr/include/c++/12/tr1/bessel_function.tcc \
+ /usr/include/c++/12/tr1/beta_function.tcc \
+ /usr/include/c++/12/tr1/ell_integral.tcc \
+ /usr/include/c++/12/tr1/exp_integral.tcc \
+ /usr/include/c++/12/tr1/hypergeometric.tcc \
+ /usr/include/c++/12/tr1/legendre_function.tcc \
+ /usr/include/c++/12/tr1/modified_bessel_func.tcc \
+ /usr/include/c++/12/tr1/poly_hermite.tcc \
+ /usr/include/c++/12/tr1/poly_laguerre.tcc \
+ /usr/include/c++/12/tr1/riemann_zeta.tcc

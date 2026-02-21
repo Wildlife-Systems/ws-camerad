@@ -153,10 +153,24 @@ CMakeFiles/camera_core.dir/src/buffer/ring_buffer.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/camera_core.dir/src/buffer/ring_buffer.cpp.s"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edwab/ws-camera-d/src/buffer/ring_buffer.cpp -o CMakeFiles/camera_core.dir/src/buffer/ring_buffer.cpp.s
 
+CMakeFiles/camera_core.dir/src/buffer/raw_ring_buffer.cpp.o: CMakeFiles/camera_core.dir/flags.make
+CMakeFiles/camera_core.dir/src/buffer/raw_ring_buffer.cpp.o: /home/edwab/ws-camera-d/src/buffer/raw_ring_buffer.cpp
+CMakeFiles/camera_core.dir/src/buffer/raw_ring_buffer.cpp.o: CMakeFiles/camera_core.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edwab/ws-camera-d/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/camera_core.dir/src/buffer/raw_ring_buffer.cpp.o"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/camera_core.dir/src/buffer/raw_ring_buffer.cpp.o -MF CMakeFiles/camera_core.dir/src/buffer/raw_ring_buffer.cpp.o.d -o CMakeFiles/camera_core.dir/src/buffer/raw_ring_buffer.cpp.o -c /home/edwab/ws-camera-d/src/buffer/raw_ring_buffer.cpp
+
+CMakeFiles/camera_core.dir/src/buffer/raw_ring_buffer.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/camera_core.dir/src/buffer/raw_ring_buffer.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edwab/ws-camera-d/src/buffer/raw_ring_buffer.cpp > CMakeFiles/camera_core.dir/src/buffer/raw_ring_buffer.cpp.i
+
+CMakeFiles/camera_core.dir/src/buffer/raw_ring_buffer.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/camera_core.dir/src/buffer/raw_ring_buffer.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edwab/ws-camera-d/src/buffer/raw_ring_buffer.cpp -o CMakeFiles/camera_core.dir/src/buffer/raw_ring_buffer.cpp.s
+
 CMakeFiles/camera_core.dir/src/buffer/shared_memory.cpp.o: CMakeFiles/camera_core.dir/flags.make
 CMakeFiles/camera_core.dir/src/buffer/shared_memory.cpp.o: /home/edwab/ws-camera-d/src/buffer/shared_memory.cpp
 CMakeFiles/camera_core.dir/src/buffer/shared_memory.cpp.o: CMakeFiles/camera_core.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edwab/ws-camera-d/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object CMakeFiles/camera_core.dir/src/buffer/shared_memory.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edwab/ws-camera-d/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/camera_core.dir/src/buffer/shared_memory.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/camera_core.dir/src/buffer/shared_memory.cpp.o -MF CMakeFiles/camera_core.dir/src/buffer/shared_memory.cpp.o.d -o CMakeFiles/camera_core.dir/src/buffer/shared_memory.cpp.o -c /home/edwab/ws-camera-d/src/buffer/shared_memory.cpp
 
 CMakeFiles/camera_core.dir/src/buffer/shared_memory.cpp.i: cmake_force
@@ -170,7 +184,7 @@ CMakeFiles/camera_core.dir/src/buffer/shared_memory.cpp.s: cmake_force
 CMakeFiles/camera_core.dir/src/ipc/control_socket.cpp.o: CMakeFiles/camera_core.dir/flags.make
 CMakeFiles/camera_core.dir/src/ipc/control_socket.cpp.o: /home/edwab/ws-camera-d/src/ipc/control_socket.cpp
 CMakeFiles/camera_core.dir/src/ipc/control_socket.cpp.o: CMakeFiles/camera_core.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edwab/ws-camera-d/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object CMakeFiles/camera_core.dir/src/ipc/control_socket.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edwab/ws-camera-d/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/camera_core.dir/src/ipc/control_socket.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/camera_core.dir/src/ipc/control_socket.cpp.o -MF CMakeFiles/camera_core.dir/src/ipc/control_socket.cpp.o.d -o CMakeFiles/camera_core.dir/src/ipc/control_socket.cpp.o -c /home/edwab/ws-camera-d/src/ipc/control_socket.cpp
 
 CMakeFiles/camera_core.dir/src/ipc/control_socket.cpp.i: cmake_force
@@ -184,7 +198,7 @@ CMakeFiles/camera_core.dir/src/ipc/control_socket.cpp.s: cmake_force
 CMakeFiles/camera_core.dir/src/ipc/frame_notifier.cpp.o: CMakeFiles/camera_core.dir/flags.make
 CMakeFiles/camera_core.dir/src/ipc/frame_notifier.cpp.o: /home/edwab/ws-camera-d/src/ipc/frame_notifier.cpp
 CMakeFiles/camera_core.dir/src/ipc/frame_notifier.cpp.o: CMakeFiles/camera_core.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edwab/ws-camera-d/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object CMakeFiles/camera_core.dir/src/ipc/frame_notifier.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edwab/ws-camera-d/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/camera_core.dir/src/ipc/frame_notifier.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/camera_core.dir/src/ipc/frame_notifier.cpp.o -MF CMakeFiles/camera_core.dir/src/ipc/frame_notifier.cpp.o.d -o CMakeFiles/camera_core.dir/src/ipc/frame_notifier.cpp.o -c /home/edwab/ws-camera-d/src/ipc/frame_notifier.cpp
 
 CMakeFiles/camera_core.dir/src/ipc/frame_notifier.cpp.i: cmake_force
@@ -198,7 +212,7 @@ CMakeFiles/camera_core.dir/src/ipc/frame_notifier.cpp.s: cmake_force
 CMakeFiles/camera_core.dir/src/capture/still_capture.cpp.o: CMakeFiles/camera_core.dir/flags.make
 CMakeFiles/camera_core.dir/src/capture/still_capture.cpp.o: /home/edwab/ws-camera-d/src/capture/still_capture.cpp
 CMakeFiles/camera_core.dir/src/capture/still_capture.cpp.o: CMakeFiles/camera_core.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edwab/ws-camera-d/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object CMakeFiles/camera_core.dir/src/capture/still_capture.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edwab/ws-camera-d/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/camera_core.dir/src/capture/still_capture.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/camera_core.dir/src/capture/still_capture.cpp.o -MF CMakeFiles/camera_core.dir/src/capture/still_capture.cpp.o.d -o CMakeFiles/camera_core.dir/src/capture/still_capture.cpp.o -c /home/edwab/ws-camera-d/src/capture/still_capture.cpp
 
 CMakeFiles/camera_core.dir/src/capture/still_capture.cpp.i: cmake_force
@@ -212,7 +226,7 @@ CMakeFiles/camera_core.dir/src/capture/still_capture.cpp.s: cmake_force
 CMakeFiles/camera_core.dir/src/capture/clip_extractor.cpp.o: CMakeFiles/camera_core.dir/flags.make
 CMakeFiles/camera_core.dir/src/capture/clip_extractor.cpp.o: /home/edwab/ws-camera-d/src/capture/clip_extractor.cpp
 CMakeFiles/camera_core.dir/src/capture/clip_extractor.cpp.o: CMakeFiles/camera_core.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edwab/ws-camera-d/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object CMakeFiles/camera_core.dir/src/capture/clip_extractor.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edwab/ws-camera-d/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/camera_core.dir/src/capture/clip_extractor.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/camera_core.dir/src/capture/clip_extractor.cpp.o -MF CMakeFiles/camera_core.dir/src/capture/clip_extractor.cpp.o.d -o CMakeFiles/camera_core.dir/src/capture/clip_extractor.cpp.o -c /home/edwab/ws-camera-d/src/capture/clip_extractor.cpp
 
 CMakeFiles/camera_core.dir/src/capture/clip_extractor.cpp.i: cmake_force
@@ -226,7 +240,7 @@ CMakeFiles/camera_core.dir/src/capture/clip_extractor.cpp.s: cmake_force
 CMakeFiles/camera_core.dir/src/streaming/rtsp_server.cpp.o: CMakeFiles/camera_core.dir/flags.make
 CMakeFiles/camera_core.dir/src/streaming/rtsp_server.cpp.o: /home/edwab/ws-camera-d/src/streaming/rtsp_server.cpp
 CMakeFiles/camera_core.dir/src/streaming/rtsp_server.cpp.o: CMakeFiles/camera_core.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edwab/ws-camera-d/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object CMakeFiles/camera_core.dir/src/streaming/rtsp_server.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edwab/ws-camera-d/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/camera_core.dir/src/streaming/rtsp_server.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/camera_core.dir/src/streaming/rtsp_server.cpp.o -MF CMakeFiles/camera_core.dir/src/streaming/rtsp_server.cpp.o.d -o CMakeFiles/camera_core.dir/src/streaming/rtsp_server.cpp.o -c /home/edwab/ws-camera-d/src/streaming/rtsp_server.cpp
 
 CMakeFiles/camera_core.dir/src/streaming/rtsp_server.cpp.i: cmake_force
@@ -240,7 +254,7 @@ CMakeFiles/camera_core.dir/src/streaming/rtsp_server.cpp.s: cmake_force
 CMakeFiles/camera_core.dir/src/streaming/v4l2_loopback.cpp.o: CMakeFiles/camera_core.dir/flags.make
 CMakeFiles/camera_core.dir/src/streaming/v4l2_loopback.cpp.o: /home/edwab/ws-camera-d/src/streaming/v4l2_loopback.cpp
 CMakeFiles/camera_core.dir/src/streaming/v4l2_loopback.cpp.o: CMakeFiles/camera_core.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edwab/ws-camera-d/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object CMakeFiles/camera_core.dir/src/streaming/v4l2_loopback.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edwab/ws-camera-d/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object CMakeFiles/camera_core.dir/src/streaming/v4l2_loopback.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/camera_core.dir/src/streaming/v4l2_loopback.cpp.o -MF CMakeFiles/camera_core.dir/src/streaming/v4l2_loopback.cpp.o.d -o CMakeFiles/camera_core.dir/src/streaming/v4l2_loopback.cpp.o -c /home/edwab/ws-camera-d/src/streaming/v4l2_loopback.cpp
 
 CMakeFiles/camera_core.dir/src/streaming/v4l2_loopback.cpp.i: cmake_force
@@ -254,7 +268,7 @@ CMakeFiles/camera_core.dir/src/streaming/v4l2_loopback.cpp.s: cmake_force
 CMakeFiles/camera_core.dir/src/utils/config.cpp.o: CMakeFiles/camera_core.dir/flags.make
 CMakeFiles/camera_core.dir/src/utils/config.cpp.o: /home/edwab/ws-camera-d/src/utils/config.cpp
 CMakeFiles/camera_core.dir/src/utils/config.cpp.o: CMakeFiles/camera_core.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edwab/ws-camera-d/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object CMakeFiles/camera_core.dir/src/utils/config.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edwab/ws-camera-d/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Building CXX object CMakeFiles/camera_core.dir/src/utils/config.cpp.o"
 	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT CMakeFiles/camera_core.dir/src/utils/config.cpp.o -MF CMakeFiles/camera_core.dir/src/utils/config.cpp.o.d -o CMakeFiles/camera_core.dir/src/utils/config.cpp.o -c /home/edwab/ws-camera-d/src/utils/config.cpp
 
 CMakeFiles/camera_core.dir/src/utils/config.cpp.i: cmake_force
@@ -273,6 +287,7 @@ camera_core_OBJECTS = \
 "CMakeFiles/camera_core.dir/src/encoder/v4l2_encoder.cpp.o" \
 "CMakeFiles/camera_core.dir/src/encoder/v4l2_jpeg.cpp.o" \
 "CMakeFiles/camera_core.dir/src/buffer/ring_buffer.cpp.o" \
+"CMakeFiles/camera_core.dir/src/buffer/raw_ring_buffer.cpp.o" \
 "CMakeFiles/camera_core.dir/src/buffer/shared_memory.cpp.o" \
 "CMakeFiles/camera_core.dir/src/ipc/control_socket.cpp.o" \
 "CMakeFiles/camera_core.dir/src/ipc/frame_notifier.cpp.o" \
@@ -291,6 +306,7 @@ libcamera_core.a: CMakeFiles/camera_core.dir/src/camera/frame_rotator.cpp.o
 libcamera_core.a: CMakeFiles/camera_core.dir/src/encoder/v4l2_encoder.cpp.o
 libcamera_core.a: CMakeFiles/camera_core.dir/src/encoder/v4l2_jpeg.cpp.o
 libcamera_core.a: CMakeFiles/camera_core.dir/src/buffer/ring_buffer.cpp.o
+libcamera_core.a: CMakeFiles/camera_core.dir/src/buffer/raw_ring_buffer.cpp.o
 libcamera_core.a: CMakeFiles/camera_core.dir/src/buffer/shared_memory.cpp.o
 libcamera_core.a: CMakeFiles/camera_core.dir/src/ipc/control_socket.cpp.o
 libcamera_core.a: CMakeFiles/camera_core.dir/src/ipc/frame_notifier.cpp.o
@@ -301,7 +317,7 @@ libcamera_core.a: CMakeFiles/camera_core.dir/src/streaming/v4l2_loopback.cpp.o
 libcamera_core.a: CMakeFiles/camera_core.dir/src/utils/config.cpp.o
 libcamera_core.a: CMakeFiles/camera_core.dir/build.make
 libcamera_core.a: CMakeFiles/camera_core.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/edwab/ws-camera-d/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Linking CXX static library libcamera_core.a"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/edwab/ws-camera-d/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_16) "Linking CXX static library libcamera_core.a"
 	$(CMAKE_COMMAND) -P CMakeFiles/camera_core.dir/cmake_clean_target.cmake
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/camera_core.dir/link.txt --verbose=$(VERBOSE)
 

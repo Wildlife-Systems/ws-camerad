@@ -463,6 +463,30 @@ test_logger.cpp.s:
 	cd /home/edwab/ws-camera-d/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/camera_daemon_tests.dir/build.make tests/CMakeFiles/camera_daemon_tests.dir/test_logger.cpp.s
 .PHONY : test_logger.cpp.s
 
+test_raw_ring_buffer.o: test_raw_ring_buffer.cpp.o
+.PHONY : test_raw_ring_buffer.o
+
+# target to build an object file
+test_raw_ring_buffer.cpp.o:
+	cd /home/edwab/ws-camera-d/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/camera_daemon_tests.dir/build.make tests/CMakeFiles/camera_daemon_tests.dir/test_raw_ring_buffer.cpp.o
+.PHONY : test_raw_ring_buffer.cpp.o
+
+test_raw_ring_buffer.i: test_raw_ring_buffer.cpp.i
+.PHONY : test_raw_ring_buffer.i
+
+# target to preprocess a source file
+test_raw_ring_buffer.cpp.i:
+	cd /home/edwab/ws-camera-d/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/camera_daemon_tests.dir/build.make tests/CMakeFiles/camera_daemon_tests.dir/test_raw_ring_buffer.cpp.i
+.PHONY : test_raw_ring_buffer.cpp.i
+
+test_raw_ring_buffer.s: test_raw_ring_buffer.cpp.s
+.PHONY : test_raw_ring_buffer.s
+
+# target to generate assembly for a file
+test_raw_ring_buffer.cpp.s:
+	cd /home/edwab/ws-camera-d/build && $(MAKE) $(MAKESILENT) -f tests/CMakeFiles/camera_daemon_tests.dir/build.make tests/CMakeFiles/camera_daemon_tests.dir/test_raw_ring_buffer.cpp.s
+.PHONY : test_raw_ring_buffer.cpp.s
+
 test_ring_buffer.o: test_ring_buffer.cpp.o
 .PHONY : test_ring_buffer.o
 
@@ -583,6 +607,9 @@ help:
 	@echo "... test_logger.o"
 	@echo "... test_logger.i"
 	@echo "... test_logger.s"
+	@echo "... test_raw_ring_buffer.o"
+	@echo "... test_raw_ring_buffer.i"
+	@echo "... test_raw_ring_buffer.s"
 	@echo "... test_ring_buffer.o"
 	@echo "... test_ring_buffer.i"
 	@echo "... test_ring_buffer.s"

@@ -15,7 +15,7 @@
 ########################
 
 //Build unit tests
-BUILD_TESTING:BOOL=OFF
+BUILD_TESTING:BOOL=ON
 
 //Path to a program.
 CMAKE_ADDR2LINE:FILEPATH=/usr/bin/addr2line
@@ -25,7 +25,7 @@ CMAKE_AR:FILEPATH=/usr/bin/ar
 
 //Choose the type of build, options are: None Debug Release RelWithDebInfo
 // MinSizeRel ...
-CMAKE_BUILD_TYPE:STRING=Release
+CMAKE_BUILD_TYPE:STRING=
 
 //Enable/Disable color output during build.
 CMAKE_COLOR_MAKEFILE:BOOL=ON
@@ -98,8 +98,8 @@ CMAKE_INSTALL_INCLUDEDIR:PATH=include
 //Info documentation (DATAROOTDIR/info)
 CMAKE_INSTALL_INFODIR:PATH=
 
-//Object code libraries (lib/aarch64-linux-gnu)
-CMAKE_INSTALL_LIBDIR:PATH=lib/aarch64-linux-gnu
+//Object code libraries (lib)
+CMAKE_INSTALL_LIBDIR:PATH=lib
 
 //Program executables (libexec)
 CMAKE_INSTALL_LIBEXECDIR:PATH=libexec
@@ -107,8 +107,8 @@ CMAKE_INSTALL_LIBEXECDIR:PATH=libexec
 //Locale-dependent data (DATAROOTDIR/locale)
 CMAKE_INSTALL_LOCALEDIR:PATH=
 
-//local state dir
-CMAKE_INSTALL_LOCALSTATEDIR:PATH=/var
+//Modifiable single-machine data (var)
+CMAKE_INSTALL_LOCALSTATEDIR:PATH=var
 
 //Man documentation (DATAROOTDIR/man)
 CMAKE_INSTALL_MANDIR:PATH=
@@ -116,8 +116,8 @@ CMAKE_INSTALL_MANDIR:PATH=
 //C header files for non-gcc (/usr/include)
 CMAKE_INSTALL_OLDINCLUDEDIR:PATH=/usr/include
 
-//Install prefix
-CMAKE_INSTALL_PREFIX:PATH=/usr
+//Install path prefix, prepended onto install directories.
+CMAKE_INSTALL_PREFIX:PATH=/usr/local
 
 //Run-time variable data (LOCALSTATEDIR/run)
 CMAKE_INSTALL_RUNSTATEDIR:PATH=
@@ -128,8 +128,8 @@ CMAKE_INSTALL_SBINDIR:PATH=sbin
 //Modifiable architecture-independent data (com)
 CMAKE_INSTALL_SHAREDSTATEDIR:PATH=com
 
-//sysconf dir
-CMAKE_INSTALL_SYSCONFDIR:PATH=/etc
+//Read-only single-machine data (etc)
+CMAKE_INSTALL_SYSCONFDIR:PATH=etc
 
 //Path to a program.
 CMAKE_LINKER:FILEPATH=/usr/bin/ld
@@ -423,7 +423,7 @@ CMAKE_MODULE_LINKER_FLAGS_RELWITHDEBINFO-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_NM
 CMAKE_NM-ADVANCED:INTERNAL=1
 //number of local generators
-CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=1
+CMAKE_NUMBER_OF_MAKEFILES:INTERNAL=2
 //ADVANCED property for variable: CMAKE_OBJCOPY
 CMAKE_OBJCOPY-ADVANCED:INTERNAL=1
 //ADVANCED property for variable: CMAKE_OBJDUMP
@@ -593,7 +593,7 @@ PKG_CONFIG_EXECUTABLE-ADVANCED:INTERNAL=1
 //linker supports push/pop state
 _CMAKE_LINKER_PUSHPOP_STATE_SUPPORTED:INTERNAL=TRUE
 //CMAKE_INSTALL_PREFIX during last run
-_GNUInstallDirs_LAST_CMAKE_INSTALL_PREFIX:INTERNAL=/usr
+_GNUInstallDirs_LAST_CMAKE_INSTALL_PREFIX:INTERNAL=/usr/local
 __pkg_config_arguments_GSTREAMER:INTERNAL=gstreamer-1.0;gstreamer-rtsp-server-1.0;gstreamer-app-1.0
 __pkg_config_arguments_LIBCAMERA:INTERNAL=REQUIRED;libcamera
 __pkg_config_arguments_LIBJPEG:INTERNAL=REQUIRED;libjpeg

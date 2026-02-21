@@ -283,6 +283,8 @@ tests/CMakeFiles/camera_daemon_tests.dir/test_capture_structs.cpp.o: \
  /home/edwab/ws-camera-d/include/camera_daemon/still_capture.hpp \
  /home/edwab/ws-camera-d/include/camera_daemon/common.hpp \
  /usr/include/c++/12/chrono \
+ /home/edwab/ws-camera-d/include/camera_daemon/raw_ring_buffer.hpp \
+ /usr/include/c++/12/cstring \
  /home/edwab/ws-camera-d/include/camera_daemon/v4l2_jpeg.hpp \
  /usr/include/c++/12/queue /usr/include/c++/12/deque \
  /usr/include/c++/12/bits/stl_deque.h /usr/include/c++/12/bits/deque.tcc \

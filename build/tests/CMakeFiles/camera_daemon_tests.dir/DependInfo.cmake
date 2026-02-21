@@ -18,6 +18,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/home/edwab/ws-camera-d/tests/test_hardware.cpp" "tests/CMakeFiles/camera_daemon_tests.dir/test_hardware.cpp.o" "gcc" "tests/CMakeFiles/camera_daemon_tests.dir/test_hardware.cpp.o.d"
   "/home/edwab/ws-camera-d/tests/test_integration.cpp" "tests/CMakeFiles/camera_daemon_tests.dir/test_integration.cpp.o" "gcc" "tests/CMakeFiles/camera_daemon_tests.dir/test_integration.cpp.o.d"
   "/home/edwab/ws-camera-d/tests/test_logger.cpp" "tests/CMakeFiles/camera_daemon_tests.dir/test_logger.cpp.o" "gcc" "tests/CMakeFiles/camera_daemon_tests.dir/test_logger.cpp.o.d"
+  "/home/edwab/ws-camera-d/tests/test_raw_ring_buffer.cpp" "tests/CMakeFiles/camera_daemon_tests.dir/test_raw_ring_buffer.cpp.o" "gcc" "tests/CMakeFiles/camera_daemon_tests.dir/test_raw_ring_buffer.cpp.o.d"
   "/home/edwab/ws-camera-d/tests/test_ring_buffer.cpp" "tests/CMakeFiles/camera_daemon_tests.dir/test_ring_buffer.cpp.o" "gcc" "tests/CMakeFiles/camera_daemon_tests.dir/test_ring_buffer.cpp.o.d"
   "/home/edwab/ws-camera-d/tests/test_shared_memory.cpp" "tests/CMakeFiles/camera_daemon_tests.dir/test_shared_memory.cpp.o" "gcc" "tests/CMakeFiles/camera_daemon_tests.dir/test_shared_memory.cpp.o.d"
   "/home/edwab/ws-camera-d/tests/test_v4l2_loopback.cpp" "tests/CMakeFiles/camera_daemon_tests.dir/test_v4l2_loopback.cpp.o" "gcc" "tests/CMakeFiles/camera_daemon_tests.dir/test_v4l2_loopback.cpp.o.d"

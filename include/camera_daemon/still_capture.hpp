@@ -1,6 +1,7 @@
 #pragma once
 
 #include "common.hpp"
+#include "raw_ring_buffer.hpp"
 #include "v4l2_jpeg.hpp"
 #include <string>
 #include <mutex>
@@ -26,7 +27,14 @@ public:
         uint32_t height = 960;
     };
 
-    explicit StillCapture(const Config& config);
+    /**
+     * @param config  Still capture configuration.
+     * @param raw_ring_buffer  Optional raw frame ring buffer for past-frame
+     *                         retrieval.  May be nullptr if past stills are
+     *                         not needed.
+     */
+    explicit StillCapture(const Config& config,
+                          RawRingBuffer* raw_ring_buffer = nullptr);
     ~StillCapture();
 
     // Non-copyable
@@ -86,6 +94,9 @@ private:
     std::atomic<bool> running_{false};
     std::thread worker_thread_;
     
+    // Optional raw frame ring buffer for past-frame stills
+    RawRingBuffer* raw_ring_buffer_ = nullptr;
+
     // Hardware JPEG encoder (optional, falls back to libjpeg)
     std::unique_ptr<V4L2JpegEncoder> hw_jpeg_;
 

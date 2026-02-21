@@ -77,6 +77,7 @@ DaemonConfig load_config(const std::string& path) {
             else if (key == "shm_name") config.shm_name = value;
             else if (key == "bgr_shm_name") config.bgr_shm_name = value;
             else if (key == "ring_buffer_seconds") config.ring_buffer_seconds = std::stoul(value);
+            else if (key == "raw_buffer_seconds") config.raw_buffer_seconds = std::stoul(value);
             else if (key == "post_event_seconds") config.post_event_seconds = std::stoul(value);
             else if (key == "enable_rtsp") config.enable_rtsp = (value == "true" || value == "1");
             else if (key == "rtsp_port") config.rtsp_port = std::stoul(value);

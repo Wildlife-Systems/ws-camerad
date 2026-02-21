@@ -6,6 +6,7 @@ pkg_check_modules(GSTREAMER gstreamer-1.0 gstreamer-rtsp-server-1.0 gstreamer-ap
 # Unit test sources (no hardware required)
 set(UNIT_TEST_SOURCES
     test_ring_buffer.cpp
+    test_raw_ring_buffer.cpp
     test_command.cpp
     test_common.cpp
     test_logger.cpp

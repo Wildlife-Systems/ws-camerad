@@ -19,6 +19,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/camera_daemon_tests.dir/test_integration.cpp.o.d"
   "CMakeFiles/camera_daemon_tests.dir/test_logger.cpp.o"
   "CMakeFiles/camera_daemon_tests.dir/test_logger.cpp.o.d"
+  "CMakeFiles/camera_daemon_tests.dir/test_raw_ring_buffer.cpp.o"
+  "CMakeFiles/camera_daemon_tests.dir/test_raw_ring_buffer.cpp.o.d"
   "CMakeFiles/camera_daemon_tests.dir/test_ring_buffer.cpp.o"
   "CMakeFiles/camera_daemon_tests.dir/test_ring_buffer.cpp.o.d"
   "CMakeFiles/camera_daemon_tests.dir/test_shared_memory.cpp.o"

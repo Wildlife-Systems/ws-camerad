@@ -77,7 +77,8 @@ struct DaemonConfig {
     std::string shm_name = DEFAULT_SHM_NAME;
     std::string bgr_shm_name = DEFAULT_BGR_SHM_NAME;
     
-    uint32_t ring_buffer_seconds = 30;  // Pre-event buffer
+    uint32_t ring_buffer_seconds = 30;  // Pre-event buffer (encoded)
+    uint32_t raw_buffer_seconds = 5;    // Raw frame buffer for past stills
     uint32_t post_event_seconds = 10;   // Post-event recording
     
     bool enable_rtsp = true;

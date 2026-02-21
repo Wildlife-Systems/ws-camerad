@@ -49,7 +49,14 @@ protected:
         {
             libcamera::CameraManager cm;
             if (cm.start() == 0) {
-                has_camera_ = !cm.cameras().empty();
+                auto cameras = cm.cameras();
+                if (!cameras.empty()) {
+                    auto camera = cameras[0];
+                    if (camera->acquire() == 0) {
+                        has_camera_ = true;
+                        camera->release();
+                    }
+                }
                 cm.stop();
             }
         }  // cm destroyed here

@@ -65,6 +65,16 @@ CMAKE_BINARY_DIR = /home/edwab/ws-camera-d/build
 #=============================================================================
 # Targets provided globally by CMake.
 
+# Special rule for the target test
+test:
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Running tests..."
+	/usr/bin/ctest --force-new-ctest-process $(ARGS)
+.PHONY : test
+
+# Special rule for the target test
+test/fast: test
+.PHONY : test/fast
+
 # Special rule for the target edit_cache
 edit_cache:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "No interactive CMake dialog available..."
@@ -239,6 +249,32 @@ motion_clip/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/motion_clip.dir/build.make CMakeFiles/motion_clip.dir/build
 .PHONY : motion_clip/fast
 
+#=============================================================================
+# Target rules for targets named camera_daemon_tests
+
+# Build rule for target.
+camera_daemon_tests: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 camera_daemon_tests
+.PHONY : camera_daemon_tests
+
+# fast build rule for target.
+camera_daemon_tests/fast:
+	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/camera_daemon_tests.dir/build.make tests/CMakeFiles/camera_daemon_tests.dir/build
+.PHONY : camera_daemon_tests/fast
+
+#=============================================================================
+# Target rules for targets named daemon_integration_tests
+
+# Build rule for target.
+daemon_integration_tests: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 daemon_integration_tests
+.PHONY : daemon_integration_tests
+
+# fast build rule for target.
+daemon_integration_tests/fast:
+	$(MAKE) $(MAKESILENT) -f tests/CMakeFiles/daemon_integration_tests.dir/build.make tests/CMakeFiles/daemon_integration_tests.dir/build
+.PHONY : daemon_integration_tests/fast
+
 examples/clip_client.o: examples/clip_client.cpp.o
 .PHONY : examples/clip_client.o
 
@@ -334,6 +370,30 @@ examples/still_client.s: examples/still_client.cpp.s
 examples/still_client.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/still_client.dir/build.make CMakeFiles/still_client.dir/examples/still_client.cpp.s
 .PHONY : examples/still_client.cpp.s
+
+src/buffer/raw_ring_buffer.o: src/buffer/raw_ring_buffer.cpp.o
+.PHONY : src/buffer/raw_ring_buffer.o
+
+# target to build an object file
+src/buffer/raw_ring_buffer.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/camera_core.dir/build.make CMakeFiles/camera_core.dir/src/buffer/raw_ring_buffer.cpp.o
+.PHONY : src/buffer/raw_ring_buffer.cpp.o
+
+src/buffer/raw_ring_buffer.i: src/buffer/raw_ring_buffer.cpp.i
+.PHONY : src/buffer/raw_ring_buffer.i
+
+# target to preprocess a source file
+src/buffer/raw_ring_buffer.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/camera_core.dir/build.make CMakeFiles/camera_core.dir/src/buffer/raw_ring_buffer.cpp.i
+.PHONY : src/buffer/raw_ring_buffer.cpp.i
+
+src/buffer/raw_ring_buffer.s: src/buffer/raw_ring_buffer.cpp.s
+.PHONY : src/buffer/raw_ring_buffer.s
+
+# target to generate assembly for a file
+src/buffer/raw_ring_buffer.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/camera_core.dir/build.make CMakeFiles/camera_core.dir/src/buffer/raw_ring_buffer.cpp.s
+.PHONY : src/buffer/raw_ring_buffer.cpp.s
 
 src/buffer/ring_buffer.o: src/buffer/ring_buffer.cpp.o
 .PHONY : src/buffer/ring_buffer.o
@@ -707,8 +767,11 @@ help:
 	@echo "... install/strip"
 	@echo "... list_install_components"
 	@echo "... rebuild_cache"
+	@echo "... test"
 	@echo "... camera_core"
+	@echo "... camera_daemon_tests"
 	@echo "... clip_client"
+	@echo "... daemon_integration_tests"
 	@echo "... frame_consumer"
 	@echo "... motion_clip"
 	@echo "... still_client"
@@ -725,6 +788,9 @@ help:
 	@echo "... examples/still_client.o"
 	@echo "... examples/still_client.i"
 	@echo "... examples/still_client.s"
+	@echo "... src/buffer/raw_ring_buffer.o"
+	@echo "... src/buffer/raw_ring_buffer.i"
+	@echo "... src/buffer/raw_ring_buffer.s"
 	@echo "... src/buffer/ring_buffer.o"
 	@echo "... src/buffer/ring_buffer.i"
 	@echo "... src/buffer/ring_buffer.s"

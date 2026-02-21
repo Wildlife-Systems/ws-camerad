@@ -171,16 +171,18 @@ CMakeFiles/camera_core.dir/src/capture/still_capture.cpp.o: \
  /usr/include/c++/12/bits/algorithmfwd.h \
  /usr/include/c++/12/bits/stl_heap.h \
  /usr/include/c++/12/bits/uniform_int_dist.h /usr/include/c++/12/atomic \
- /home/edwab/ws-camera-d/include/camera_daemon/v4l2_jpeg.hpp \
- /usr/include/c++/12/cstddef /usr/include/c++/12/mutex \
- /usr/include/c++/12/system_error \
+ /home/edwab/ws-camera-d/include/camera_daemon/raw_ring_buffer.hpp \
+ /usr/include/c++/12/mutex /usr/include/c++/12/system_error \
  /usr/include/aarch64-linux-gnu/c++/12/bits/error_constants.h \
  /usr/include/c++/12/stdexcept /usr/include/c++/12/bits/std_mutex.h \
- /usr/include/c++/12/bits/unique_lock.h \
- /usr/include/c++/12/condition_variable /usr/include/c++/12/queue \
- /usr/include/c++/12/deque /usr/include/c++/12/bits/stl_deque.h \
- /usr/include/c++/12/bits/deque.tcc /usr/include/c++/12/bits/stl_queue.h \
- /usr/include/c++/12/thread /usr/include/c++/12/bits/std_thread.h \
+ /usr/include/c++/12/bits/unique_lock.h /usr/include/c++/12/cstring \
+ /usr/include/string.h /usr/include/strings.h \
+ /home/edwab/ws-camera-d/include/camera_daemon/v4l2_jpeg.hpp \
+ /usr/include/c++/12/cstddef /usr/include/c++/12/condition_variable \
+ /usr/include/c++/12/queue /usr/include/c++/12/deque \
+ /usr/include/c++/12/bits/stl_deque.h /usr/include/c++/12/bits/deque.tcc \
+ /usr/include/c++/12/bits/stl_queue.h /usr/include/c++/12/thread \
+ /usr/include/c++/12/bits/std_thread.h \
  /usr/include/c++/12/bits/this_thread_sleep.h \
  /home/edwab/ws-camera-d/include/camera_daemon/logger.hpp \
  /usr/include/c++/12/iostream /usr/include/c++/12/ostream \
@@ -214,7 +216,5 @@ CMakeFiles/camera_core.dir/src/capture/still_capture.cpp.o: \
  /usr/include/c++/12/bits/fstream.tcc /usr/include/c++/12/filesystem \
  /usr/include/c++/12/bits/fs_fwd.h /usr/include/c++/12/bits/fs_path.h \
  /usr/include/c++/12/codecvt /usr/include/c++/12/bits/fs_dir.h \
- /usr/include/c++/12/bits/fs_ops.h /usr/include/c++/12/cstring \
- /usr/include/string.h /usr/include/strings.h \
- /usr/include/c++/12/algorithm \
+ /usr/include/c++/12/bits/fs_ops.h /usr/include/c++/12/algorithm \
  /usr/include/c++/12/pstl/glue_algorithm_defs.h

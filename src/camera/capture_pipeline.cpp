@@ -441,7 +441,18 @@ bool CapturePipeline::initialize() {
     still_config.jpeg_quality = config_.camera.jpeg_quality;
     still_config.width = output_width;
     still_config.height = output_height;
-    still_capture_ = std::make_unique<StillCapture>(still_config);
+
+    // Create raw frame ring buffer for past-still retrieval
+    if (config_.raw_buffer_seconds > 0) {
+        size_t max_frame_bytes = output_width * output_height * 3 / 2;
+        raw_ring_buffer_ = std::make_unique<RawRingBuffer>(
+            config_.raw_buffer_seconds,
+            config_.camera.framerate,
+            max_frame_bytes
+        );
+    }
+
+    still_capture_ = std::make_unique<StillCapture>(still_config, raw_ring_buffer_.get());
 
     // Create clip extractor
     ClipExtractor::Config clip_config;
@@ -953,6 +964,11 @@ void CapturePipeline::on_raw_frame(const FrameMetadata& metadata, const uint8_t*
 
     // Submit to still capture (uses rotated frame if applicable)
     still_capture_->submit_frame(frame_data, frame_size, frame_meta);
+
+    // Push to raw ring buffer for past-still retrieval
+    if (raw_ring_buffer_) {
+        raw_ring_buffer_->push(frame_data, frame_size, frame_meta);
+    }
 
     // Write to virtual cameras (v4l2loopback outputs)
     for (auto& vcam : virtual_cameras_) {

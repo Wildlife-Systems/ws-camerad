@@ -325,6 +325,8 @@ tests/CMakeFiles/camera_daemon_tests.dir/test_v4l2_loopback.cpp.o: \
  /usr/include/linux/v4l2-common.h /usr/include/linux/v4l2-controls.h \
  /usr/include/linux/const.h \
  /home/edwab/ws-camera-d/include/camera_daemon/ring_buffer.hpp \
+ /home/edwab/ws-camera-d/include/camera_daemon/raw_ring_buffer.hpp \
+ /usr/include/c++/12/cstring \
  /home/edwab/ws-camera-d/include/camera_daemon/shared_memory.hpp \
  /home/edwab/ws-camera-d/include/camera_daemon/frame_notifier.hpp \
  /home/edwab/ws-camera-d/include/camera_daemon/still_capture.hpp \
@@ -340,4 +342,4 @@ tests/CMakeFiles/camera_daemon_tests.dir/test_v4l2_loopback.cpp.o: \
  /usr/include/c++/12/bits/fstream.tcc /usr/include/c++/12/filesystem \
  /usr/include/c++/12/bits/fs_fwd.h /usr/include/c++/12/bits/fs_path.h \
  /usr/include/c++/12/codecvt /usr/include/c++/12/bits/fs_dir.h \
- /usr/include/c++/12/bits/fs_ops.h /usr/include/c++/12/cstring
+ /usr/include/c++/12/bits/fs_ops.h

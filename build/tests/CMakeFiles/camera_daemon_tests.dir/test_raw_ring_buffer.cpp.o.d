@@ -1,6 +1,7 @@
-tests/CMakeFiles/camera_daemon_tests.dir/test_config.cpp.o: \
- /home/edwab/ws-camera-d/tests/test_config.cpp /usr/include/stdc-predef.h \
- /usr/include/gtest/gtest.h /usr/include/c++/12/cstddef \
+tests/CMakeFiles/camera_daemon_tests.dir/test_raw_ring_buffer.cpp.o: \
+ /home/edwab/ws-camera-d/tests/test_raw_ring_buffer.cpp \
+ /usr/include/stdc-predef.h /usr/include/gtest/gtest.h \
+ /usr/include/c++/12/cstddef \
  /usr/include/aarch64-linux-gnu/c++/12/bits/c++config.h \
  /usr/include/aarch64-linux-gnu/c++/12/bits/os_defines.h \
  /usr/include/features.h /usr/include/features-time64.h \
@@ -279,66 +280,8 @@ tests/CMakeFiles/camera_daemon_tests.dir/test_config.cpp.o: \
  /usr/include/gtest/gtest-test-part.h \
  /usr/include/gtest/gtest-typed-test.h \
  /usr/include/gtest/gtest_pred_impl.h /usr/include/gtest/gtest_prod.h \
- /home/edwab/ws-camera-d/include/camera_daemon/common.hpp \
- /usr/include/c++/12/chrono \
- /home/edwab/ws-camera-d/include/camera_daemon/daemon.hpp \
- /home/edwab/ws-camera-d/include/camera_daemon/capture_pipeline.hpp \
- /home/edwab/ws-camera-d/include/camera_daemon/camera_manager.hpp \
- /usr/include/libcamera/libcamera/libcamera.h \
- /usr/include/libcamera/libcamera/camera.h \
- /usr/include/libcamera/libcamera/base/class.h \
- /usr/include/libcamera/libcamera/base/flags.h \
- /usr/include/libcamera/libcamera/base/object.h /usr/include/c++/12/list \
- /usr/include/c++/12/bits/stl_list.h /usr/include/c++/12/bits/list.tcc \
- /usr/include/libcamera/libcamera/base/bound_method.h \
- /usr/include/libcamera/libcamera/base/signal.h \
- /usr/include/libcamera/libcamera/controls.h \
- /usr/include/libcamera/libcamera/base/span.h \
- /usr/include/libcamera/libcamera/geometry.h \
- /usr/include/c++/12/algorithm \
- /usr/include/c++/12/pstl/glue_algorithm_defs.h \
- /usr/include/libcamera/libcamera/orientation.h \
- /usr/include/libcamera/libcamera/request.h \
- /usr/include/libcamera/libcamera/fence.h \
- /usr/include/libcamera/libcamera/base/unique_fd.h \
- /usr/include/libcamera/libcamera/stream.h \
- /usr/include/libcamera/libcamera/color_space.h \
- /usr/include/libcamera/libcamera/framebuffer.h \
- /usr/include/libcamera/libcamera/base/shared_fd.h \
- /usr/include/libcamera/libcamera/pixel_format.h \
- /usr/include/libcamera/libcamera/camera_manager.h \
- /usr/include/libcamera/libcamera/control_ids.h \
- /usr/include/libcamera/libcamera/formats.h \
- /usr/include/libcamera/libcamera/framebuffer_allocator.h \
- /usr/include/libcamera/libcamera/logging.h \
- /usr/include/libcamera/libcamera/property_ids.h \
- /usr/include/libcamera/libcamera/transform.h \
- /usr/include/libcamera/libcamera/version.h /usr/include/c++/12/thread \
- /usr/include/c++/12/bits/std_thread.h \
- /usr/include/c++/12/bits/this_thread_sleep.h /usr/include/c++/12/queue \
- /usr/include/c++/12/deque /usr/include/c++/12/bits/stl_deque.h \
- /usr/include/c++/12/bits/deque.tcc /usr/include/c++/12/bits/stl_queue.h \
- /home/edwab/ws-camera-d/include/camera_daemon/v4l2_encoder.hpp \
- /usr/include/linux/videodev2.h /usr/include/linux/ioctl.h \
- /usr/lib/linux/uapi/arm64/asm/ioctl.h /usr/include/asm-generic/ioctl.h \
- /usr/include/linux/v4l2-common.h /usr/include/linux/v4l2-controls.h \
- /usr/include/linux/const.h \
- /home/edwab/ws-camera-d/include/camera_daemon/ring_buffer.hpp \
  /home/edwab/ws-camera-d/include/camera_daemon/raw_ring_buffer.hpp \
- /usr/include/c++/12/cstring \
- /home/edwab/ws-camera-d/include/camera_daemon/shared_memory.hpp \
- /home/edwab/ws-camera-d/include/camera_daemon/frame_notifier.hpp \
- /home/edwab/ws-camera-d/include/camera_daemon/still_capture.hpp \
- /home/edwab/ws-camera-d/include/camera_daemon/v4l2_jpeg.hpp \
- /home/edwab/ws-camera-d/include/camera_daemon/clip_extractor.hpp \
- /home/edwab/ws-camera-d/include/camera_daemon/rtsp_server.hpp \
- /home/edwab/ws-camera-d/include/camera_daemon/frame_rotator.hpp \
- /home/edwab/ws-camera-d/include/camera_daemon/v4l2_loopback.hpp \
- /home/edwab/ws-camera-d/include/camera_daemon/control_socket.hpp \
- /usr/include/c++/12/csignal /usr/include/c++/12/fstream \
- /usr/include/aarch64-linux-gnu/c++/12/bits/basic_file.h \
- /usr/include/aarch64-linux-gnu/c++/12/bits/c++io.h \
- /usr/include/c++/12/bits/fstream.tcc /usr/include/c++/12/filesystem \
- /usr/include/c++/12/bits/fs_fwd.h /usr/include/c++/12/bits/fs_path.h \
- /usr/include/c++/12/codecvt /usr/include/c++/12/bits/fs_dir.h \
- /usr/include/c++/12/bits/fs_ops.h
+ /home/edwab/ws-camera-d/include/camera_daemon/common.hpp \
+ /usr/include/c++/12/chrono /usr/include/c++/12/cstring \
+ /usr/include/c++/12/thread /usr/include/c++/12/bits/std_thread.h \
+ /usr/include/c++/12/bits/this_thread_sleep.h

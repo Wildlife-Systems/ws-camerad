@@ -4,6 +4,7 @@
 #include "camera_manager.hpp"
 #include "v4l2_encoder.hpp"
 #include "ring_buffer.hpp"
+#include "raw_ring_buffer.hpp"
 #include "shared_memory.hpp"
 #include "frame_notifier.hpp"
 #include "still_capture.hpp"
@@ -117,6 +118,7 @@ private:
     bool encoder_initialized_ = false;
     V4L2Encoder::Config pending_enc_config_;
     std::unique_ptr<EncodedRingBuffer> ring_buffer_;
+    std::unique_ptr<RawRingBuffer> raw_ring_buffer_;        // Raw frames for past stills
     std::unique_ptr<FramePublisher> frame_publisher_;      // Raw YUV frames
     std::unique_ptr<FramePublisher> bgr_frame_publisher_;  // BGR frames for OpenCV
     std::unique_ptr<FrameNotifier> frame_notifier_;        // Notification socket

@@ -83,10 +83,24 @@ tests/CMakeFiles/camera_daemon_tests.dir/test_ring_buffer.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/camera_daemon_tests.dir/test_ring_buffer.cpp.s"
 	cd /home/edwab/ws-camera-d/build/tests && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edwab/ws-camera-d/tests/test_ring_buffer.cpp -o CMakeFiles/camera_daemon_tests.dir/test_ring_buffer.cpp.s
 
+tests/CMakeFiles/camera_daemon_tests.dir/test_raw_ring_buffer.cpp.o: tests/CMakeFiles/camera_daemon_tests.dir/flags.make
+tests/CMakeFiles/camera_daemon_tests.dir/test_raw_ring_buffer.cpp.o: /home/edwab/ws-camera-d/tests/test_raw_ring_buffer.cpp
+tests/CMakeFiles/camera_daemon_tests.dir/test_raw_ring_buffer.cpp.o: tests/CMakeFiles/camera_daemon_tests.dir/compiler_depend.ts
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edwab/ws-camera-d/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object tests/CMakeFiles/camera_daemon_tests.dir/test_raw_ring_buffer.cpp.o"
+	cd /home/edwab/ws-camera-d/build/tests && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT tests/CMakeFiles/camera_daemon_tests.dir/test_raw_ring_buffer.cpp.o -MF CMakeFiles/camera_daemon_tests.dir/test_raw_ring_buffer.cpp.o.d -o CMakeFiles/camera_daemon_tests.dir/test_raw_ring_buffer.cpp.o -c /home/edwab/ws-camera-d/tests/test_raw_ring_buffer.cpp
+
+tests/CMakeFiles/camera_daemon_tests.dir/test_raw_ring_buffer.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/camera_daemon_tests.dir/test_raw_ring_buffer.cpp.i"
+	cd /home/edwab/ws-camera-d/build/tests && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/edwab/ws-camera-d/tests/test_raw_ring_buffer.cpp > CMakeFiles/camera_daemon_tests.dir/test_raw_ring_buffer.cpp.i
+
+tests/CMakeFiles/camera_daemon_tests.dir/test_raw_ring_buffer.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/camera_daemon_tests.dir/test_raw_ring_buffer.cpp.s"
+	cd /home/edwab/ws-camera-d/build/tests && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/edwab/ws-camera-d/tests/test_raw_ring_buffer.cpp -o CMakeFiles/camera_daemon_tests.dir/test_raw_ring_buffer.cpp.s
+
 tests/CMakeFiles/camera_daemon_tests.dir/test_command.cpp.o: tests/CMakeFiles/camera_daemon_tests.dir/flags.make
 tests/CMakeFiles/camera_daemon_tests.dir/test_command.cpp.o: /home/edwab/ws-camera-d/tests/test_command.cpp
 tests/CMakeFiles/camera_daemon_tests.dir/test_command.cpp.o: tests/CMakeFiles/camera_daemon_tests.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edwab/ws-camera-d/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object tests/CMakeFiles/camera_daemon_tests.dir/test_command.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edwab/ws-camera-d/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object tests/CMakeFiles/camera_daemon_tests.dir/test_command.cpp.o"
 	cd /home/edwab/ws-camera-d/build/tests && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT tests/CMakeFiles/camera_daemon_tests.dir/test_command.cpp.o -MF CMakeFiles/camera_daemon_tests.dir/test_command.cpp.o.d -o CMakeFiles/camera_daemon_tests.dir/test_command.cpp.o -c /home/edwab/ws-camera-d/tests/test_command.cpp
 
 tests/CMakeFiles/camera_daemon_tests.dir/test_command.cpp.i: cmake_force
@@ -100,7 +114,7 @@ tests/CMakeFiles/camera_daemon_tests.dir/test_command.cpp.s: cmake_force
 tests/CMakeFiles/camera_daemon_tests.dir/test_common.cpp.o: tests/CMakeFiles/camera_daemon_tests.dir/flags.make
 tests/CMakeFiles/camera_daemon_tests.dir/test_common.cpp.o: /home/edwab/ws-camera-d/tests/test_common.cpp
 tests/CMakeFiles/camera_daemon_tests.dir/test_common.cpp.o: tests/CMakeFiles/camera_daemon_tests.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edwab/ws-camera-d/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object tests/CMakeFiles/camera_daemon_tests.dir/test_common.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edwab/ws-camera-d/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object tests/CMakeFiles/camera_daemon_tests.dir/test_common.cpp.o"
 	cd /home/edwab/ws-camera-d/build/tests && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT tests/CMakeFiles/camera_daemon_tests.dir/test_common.cpp.o -MF CMakeFiles/camera_daemon_tests.dir/test_common.cpp.o.d -o CMakeFiles/camera_daemon_tests.dir/test_common.cpp.o -c /home/edwab/ws-camera-d/tests/test_common.cpp
 
 tests/CMakeFiles/camera_daemon_tests.dir/test_common.cpp.i: cmake_force
@@ -114,7 +128,7 @@ tests/CMakeFiles/camera_daemon_tests.dir/test_common.cpp.s: cmake_force
 tests/CMakeFiles/camera_daemon_tests.dir/test_logger.cpp.o: tests/CMakeFiles/camera_daemon_tests.dir/flags.make
 tests/CMakeFiles/camera_daemon_tests.dir/test_logger.cpp.o: /home/edwab/ws-camera-d/tests/test_logger.cpp
 tests/CMakeFiles/camera_daemon_tests.dir/test_logger.cpp.o: tests/CMakeFiles/camera_daemon_tests.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edwab/ws-camera-d/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object tests/CMakeFiles/camera_daemon_tests.dir/test_logger.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edwab/ws-camera-d/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object tests/CMakeFiles/camera_daemon_tests.dir/test_logger.cpp.o"
 	cd /home/edwab/ws-camera-d/build/tests && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT tests/CMakeFiles/camera_daemon_tests.dir/test_logger.cpp.o -MF CMakeFiles/camera_daemon_tests.dir/test_logger.cpp.o.d -o CMakeFiles/camera_daemon_tests.dir/test_logger.cpp.o -c /home/edwab/ws-camera-d/tests/test_logger.cpp
 
 tests/CMakeFiles/camera_daemon_tests.dir/test_logger.cpp.i: cmake_force
@@ -128,7 +142,7 @@ tests/CMakeFiles/camera_daemon_tests.dir/test_logger.cpp.s: cmake_force
 tests/CMakeFiles/camera_daemon_tests.dir/test_shared_memory.cpp.o: tests/CMakeFiles/camera_daemon_tests.dir/flags.make
 tests/CMakeFiles/camera_daemon_tests.dir/test_shared_memory.cpp.o: /home/edwab/ws-camera-d/tests/test_shared_memory.cpp
 tests/CMakeFiles/camera_daemon_tests.dir/test_shared_memory.cpp.o: tests/CMakeFiles/camera_daemon_tests.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edwab/ws-camera-d/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object tests/CMakeFiles/camera_daemon_tests.dir/test_shared_memory.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edwab/ws-camera-d/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object tests/CMakeFiles/camera_daemon_tests.dir/test_shared_memory.cpp.o"
 	cd /home/edwab/ws-camera-d/build/tests && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT tests/CMakeFiles/camera_daemon_tests.dir/test_shared_memory.cpp.o -MF CMakeFiles/camera_daemon_tests.dir/test_shared_memory.cpp.o.d -o CMakeFiles/camera_daemon_tests.dir/test_shared_memory.cpp.o -c /home/edwab/ws-camera-d/tests/test_shared_memory.cpp
 
 tests/CMakeFiles/camera_daemon_tests.dir/test_shared_memory.cpp.i: cmake_force
@@ -142,7 +156,7 @@ tests/CMakeFiles/camera_daemon_tests.dir/test_shared_memory.cpp.s: cmake_force
 tests/CMakeFiles/camera_daemon_tests.dir/test_config.cpp.o: tests/CMakeFiles/camera_daemon_tests.dir/flags.make
 tests/CMakeFiles/camera_daemon_tests.dir/test_config.cpp.o: /home/edwab/ws-camera-d/tests/test_config.cpp
 tests/CMakeFiles/camera_daemon_tests.dir/test_config.cpp.o: tests/CMakeFiles/camera_daemon_tests.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edwab/ws-camera-d/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object tests/CMakeFiles/camera_daemon_tests.dir/test_config.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edwab/ws-camera-d/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object tests/CMakeFiles/camera_daemon_tests.dir/test_config.cpp.o"
 	cd /home/edwab/ws-camera-d/build/tests && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT tests/CMakeFiles/camera_daemon_tests.dir/test_config.cpp.o -MF CMakeFiles/camera_daemon_tests.dir/test_config.cpp.o.d -o CMakeFiles/camera_daemon_tests.dir/test_config.cpp.o -c /home/edwab/ws-camera-d/tests/test_config.cpp
 
 tests/CMakeFiles/camera_daemon_tests.dir/test_config.cpp.i: cmake_force
@@ -156,7 +170,7 @@ tests/CMakeFiles/camera_daemon_tests.dir/test_config.cpp.s: cmake_force
 tests/CMakeFiles/camera_daemon_tests.dir/test_capture_structs.cpp.o: tests/CMakeFiles/camera_daemon_tests.dir/flags.make
 tests/CMakeFiles/camera_daemon_tests.dir/test_capture_structs.cpp.o: /home/edwab/ws-camera-d/tests/test_capture_structs.cpp
 tests/CMakeFiles/camera_daemon_tests.dir/test_capture_structs.cpp.o: tests/CMakeFiles/camera_daemon_tests.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edwab/ws-camera-d/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building CXX object tests/CMakeFiles/camera_daemon_tests.dir/test_capture_structs.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edwab/ws-camera-d/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object tests/CMakeFiles/camera_daemon_tests.dir/test_capture_structs.cpp.o"
 	cd /home/edwab/ws-camera-d/build/tests && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT tests/CMakeFiles/camera_daemon_tests.dir/test_capture_structs.cpp.o -MF CMakeFiles/camera_daemon_tests.dir/test_capture_structs.cpp.o.d -o CMakeFiles/camera_daemon_tests.dir/test_capture_structs.cpp.o -c /home/edwab/ws-camera-d/tests/test_capture_structs.cpp
 
 tests/CMakeFiles/camera_daemon_tests.dir/test_capture_structs.cpp.i: cmake_force
@@ -170,7 +184,7 @@ tests/CMakeFiles/camera_daemon_tests.dir/test_capture_structs.cpp.s: cmake_force
 tests/CMakeFiles/camera_daemon_tests.dir/test_control_socket.cpp.o: tests/CMakeFiles/camera_daemon_tests.dir/flags.make
 tests/CMakeFiles/camera_daemon_tests.dir/test_control_socket.cpp.o: /home/edwab/ws-camera-d/tests/test_control_socket.cpp
 tests/CMakeFiles/camera_daemon_tests.dir/test_control_socket.cpp.o: tests/CMakeFiles/camera_daemon_tests.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edwab/ws-camera-d/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Building CXX object tests/CMakeFiles/camera_daemon_tests.dir/test_control_socket.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edwab/ws-camera-d/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object tests/CMakeFiles/camera_daemon_tests.dir/test_control_socket.cpp.o"
 	cd /home/edwab/ws-camera-d/build/tests && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT tests/CMakeFiles/camera_daemon_tests.dir/test_control_socket.cpp.o -MF CMakeFiles/camera_daemon_tests.dir/test_control_socket.cpp.o.d -o CMakeFiles/camera_daemon_tests.dir/test_control_socket.cpp.o -c /home/edwab/ws-camera-d/tests/test_control_socket.cpp
 
 tests/CMakeFiles/camera_daemon_tests.dir/test_control_socket.cpp.i: cmake_force
@@ -184,7 +198,7 @@ tests/CMakeFiles/camera_daemon_tests.dir/test_control_socket.cpp.s: cmake_force
 tests/CMakeFiles/camera_daemon_tests.dir/test_integration.cpp.o: tests/CMakeFiles/camera_daemon_tests.dir/flags.make
 tests/CMakeFiles/camera_daemon_tests.dir/test_integration.cpp.o: /home/edwab/ws-camera-d/tests/test_integration.cpp
 tests/CMakeFiles/camera_daemon_tests.dir/test_integration.cpp.o: tests/CMakeFiles/camera_daemon_tests.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edwab/ws-camera-d/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_9) "Building CXX object tests/CMakeFiles/camera_daemon_tests.dir/test_integration.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edwab/ws-camera-d/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object tests/CMakeFiles/camera_daemon_tests.dir/test_integration.cpp.o"
 	cd /home/edwab/ws-camera-d/build/tests && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT tests/CMakeFiles/camera_daemon_tests.dir/test_integration.cpp.o -MF CMakeFiles/camera_daemon_tests.dir/test_integration.cpp.o.d -o CMakeFiles/camera_daemon_tests.dir/test_integration.cpp.o -c /home/edwab/ws-camera-d/tests/test_integration.cpp
 
 tests/CMakeFiles/camera_daemon_tests.dir/test_integration.cpp.i: cmake_force
@@ -198,7 +212,7 @@ tests/CMakeFiles/camera_daemon_tests.dir/test_integration.cpp.s: cmake_force
 tests/CMakeFiles/camera_daemon_tests.dir/test_v4l2_loopback.cpp.o: tests/CMakeFiles/camera_daemon_tests.dir/flags.make
 tests/CMakeFiles/camera_daemon_tests.dir/test_v4l2_loopback.cpp.o: /home/edwab/ws-camera-d/tests/test_v4l2_loopback.cpp
 tests/CMakeFiles/camera_daemon_tests.dir/test_v4l2_loopback.cpp.o: tests/CMakeFiles/camera_daemon_tests.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edwab/ws-camera-d/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_10) "Building CXX object tests/CMakeFiles/camera_daemon_tests.dir/test_v4l2_loopback.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edwab/ws-camera-d/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object tests/CMakeFiles/camera_daemon_tests.dir/test_v4l2_loopback.cpp.o"
 	cd /home/edwab/ws-camera-d/build/tests && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT tests/CMakeFiles/camera_daemon_tests.dir/test_v4l2_loopback.cpp.o -MF CMakeFiles/camera_daemon_tests.dir/test_v4l2_loopback.cpp.o.d -o CMakeFiles/camera_daemon_tests.dir/test_v4l2_loopback.cpp.o -c /home/edwab/ws-camera-d/tests/test_v4l2_loopback.cpp
 
 tests/CMakeFiles/camera_daemon_tests.dir/test_v4l2_loopback.cpp.i: cmake_force
@@ -212,7 +226,7 @@ tests/CMakeFiles/camera_daemon_tests.dir/test_v4l2_loopback.cpp.s: cmake_force
 tests/CMakeFiles/camera_daemon_tests.dir/test_frame_rotator.cpp.o: tests/CMakeFiles/camera_daemon_tests.dir/flags.make
 tests/CMakeFiles/camera_daemon_tests.dir/test_frame_rotator.cpp.o: /home/edwab/ws-camera-d/tests/test_frame_rotator.cpp
 tests/CMakeFiles/camera_daemon_tests.dir/test_frame_rotator.cpp.o: tests/CMakeFiles/camera_daemon_tests.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edwab/ws-camera-d/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_11) "Building CXX object tests/CMakeFiles/camera_daemon_tests.dir/test_frame_rotator.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edwab/ws-camera-d/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object tests/CMakeFiles/camera_daemon_tests.dir/test_frame_rotator.cpp.o"
 	cd /home/edwab/ws-camera-d/build/tests && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT tests/CMakeFiles/camera_daemon_tests.dir/test_frame_rotator.cpp.o -MF CMakeFiles/camera_daemon_tests.dir/test_frame_rotator.cpp.o.d -o CMakeFiles/camera_daemon_tests.dir/test_frame_rotator.cpp.o -c /home/edwab/ws-camera-d/tests/test_frame_rotator.cpp
 
 tests/CMakeFiles/camera_daemon_tests.dir/test_frame_rotator.cpp.i: cmake_force
@@ -226,7 +240,7 @@ tests/CMakeFiles/camera_daemon_tests.dir/test_frame_rotator.cpp.s: cmake_force
 tests/CMakeFiles/camera_daemon_tests.dir/test_hardware.cpp.o: tests/CMakeFiles/camera_daemon_tests.dir/flags.make
 tests/CMakeFiles/camera_daemon_tests.dir/test_hardware.cpp.o: /home/edwab/ws-camera-d/tests/test_hardware.cpp
 tests/CMakeFiles/camera_daemon_tests.dir/test_hardware.cpp.o: tests/CMakeFiles/camera_daemon_tests.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edwab/ws-camera-d/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_12) "Building CXX object tests/CMakeFiles/camera_daemon_tests.dir/test_hardware.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edwab/ws-camera-d/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object tests/CMakeFiles/camera_daemon_tests.dir/test_hardware.cpp.o"
 	cd /home/edwab/ws-camera-d/build/tests && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT tests/CMakeFiles/camera_daemon_tests.dir/test_hardware.cpp.o -MF CMakeFiles/camera_daemon_tests.dir/test_hardware.cpp.o.d -o CMakeFiles/camera_daemon_tests.dir/test_hardware.cpp.o -c /home/edwab/ws-camera-d/tests/test_hardware.cpp
 
 tests/CMakeFiles/camera_daemon_tests.dir/test_hardware.cpp.i: cmake_force
@@ -240,7 +254,7 @@ tests/CMakeFiles/camera_daemon_tests.dir/test_hardware.cpp.s: cmake_force
 tests/CMakeFiles/camera_daemon_tests.dir/test_full_integration.cpp.o: tests/CMakeFiles/camera_daemon_tests.dir/flags.make
 tests/CMakeFiles/camera_daemon_tests.dir/test_full_integration.cpp.o: /home/edwab/ws-camera-d/tests/test_full_integration.cpp
 tests/CMakeFiles/camera_daemon_tests.dir/test_full_integration.cpp.o: tests/CMakeFiles/camera_daemon_tests.dir/compiler_depend.ts
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edwab/ws-camera-d/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_13) "Building CXX object tests/CMakeFiles/camera_daemon_tests.dir/test_full_integration.cpp.o"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/edwab/ws-camera-d/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Building CXX object tests/CMakeFiles/camera_daemon_tests.dir/test_full_integration.cpp.o"
 	cd /home/edwab/ws-camera-d/build/tests && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -MD -MT tests/CMakeFiles/camera_daemon_tests.dir/test_full_integration.cpp.o -MF CMakeFiles/camera_daemon_tests.dir/test_full_integration.cpp.o.d -o CMakeFiles/camera_daemon_tests.dir/test_full_integration.cpp.o -c /home/edwab/ws-camera-d/tests/test_full_integration.cpp
 
 tests/CMakeFiles/camera_daemon_tests.dir/test_full_integration.cpp.i: cmake_force
@@ -254,6 +268,7 @@ tests/CMakeFiles/camera_daemon_tests.dir/test_full_integration.cpp.s: cmake_forc
 # Object files for target camera_daemon_tests
 camera_daemon_tests_OBJECTS = \
 "CMakeFiles/camera_daemon_tests.dir/test_ring_buffer.cpp.o" \
+"CMakeFiles/camera_daemon_tests.dir/test_raw_ring_buffer.cpp.o" \
 "CMakeFiles/camera_daemon_tests.dir/test_command.cpp.o" \
 "CMakeFiles/camera_daemon_tests.dir/test_common.cpp.o" \
 "CMakeFiles/camera_daemon_tests.dir/test_logger.cpp.o" \
@@ -271,6 +286,7 @@ camera_daemon_tests_OBJECTS = \
 camera_daemon_tests_EXTERNAL_OBJECTS =
 
 tests/camera_daemon_tests: tests/CMakeFiles/camera_daemon_tests.dir/test_ring_buffer.cpp.o
+tests/camera_daemon_tests: tests/CMakeFiles/camera_daemon_tests.dir/test_raw_ring_buffer.cpp.o
 tests/camera_daemon_tests: tests/CMakeFiles/camera_daemon_tests.dir/test_command.cpp.o
 tests/camera_daemon_tests: tests/CMakeFiles/camera_daemon_tests.dir/test_common.cpp.o
 tests/camera_daemon_tests: tests/CMakeFiles/camera_daemon_tests.dir/test_logger.cpp.o
@@ -288,7 +304,7 @@ tests/camera_daemon_tests: libcamera_core.a
 tests/camera_daemon_tests: /usr/lib/aarch64-linux-gnu/libgtest_main.a
 tests/camera_daemon_tests: /usr/lib/aarch64-linux-gnu/libgtest.a
 tests/camera_daemon_tests: tests/CMakeFiles/camera_daemon_tests.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/edwab/ws-camera-d/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_14) "Linking CXX executable camera_daemon_tests"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/edwab/ws-camera-d/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_15) "Linking CXX executable camera_daemon_tests"
 	cd /home/edwab/ws-camera-d/build/tests && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/camera_daemon_tests.dir/link.txt --verbose=$(VERBOSE)
 	cd /home/edwab/ws-camera-d/build/tests && /usr/bin/cmake -D TEST_TARGET=camera_daemon_tests -D TEST_EXECUTABLE=/home/edwab/ws-camera-d/build/tests/camera_daemon_tests -D TEST_EXECUTOR= -D TEST_WORKING_DIR=/home/edwab/ws-camera-d/build/tests -D TEST_EXTRA_ARGS= -D TEST_PROPERTIES= -D TEST_PREFIX= -D TEST_SUFFIX= -D TEST_FILTER= -D NO_PRETTY_TYPES=FALSE -D NO_PRETTY_VALUES=FALSE -D TEST_LIST=camera_daemon_tests_TESTS -D CTEST_FILE=/home/edwab/ws-camera-d/build/tests/camera_daemon_tests[1]_tests.cmake -D TEST_DISCOVERY_TIMEOUT=5 -D TEST_XML_OUTPUT_DIR= -P /usr/share/cmake-3.25/Modules/GoogleTestAddTests.cmake
 

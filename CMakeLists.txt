@@ -43,6 +43,7 @@ add_library(camera_core STATIC
     src/encoder/v4l2_encoder.cpp
     src/encoder/v4l2_jpeg.cpp
     src/buffer/ring_buffer.cpp
+    src/buffer/raw_ring_buffer.cpp
     src/buffer/shared_memory.cpp
     src/ipc/control_socket.cpp
     src/ipc/frame_notifier.cpp

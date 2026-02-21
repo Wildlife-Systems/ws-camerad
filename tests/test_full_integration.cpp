@@ -63,10 +63,17 @@ protected:
         // Acquire hardware lock FIRST - blocks until available
         ASSERT_TRUE(hw_lock.acquire()) << "Failed to acquire hardware lock";
         
-        // Check if a camera is available
+        // Check if a camera is available AND can be acquired
         libcamera::CameraManager cm;
         if (cm.start() == 0) {
-            has_camera = !cm.cameras().empty();
+            auto cameras = cm.cameras();
+            if (!cameras.empty()) {
+                auto camera = cameras[0];
+                if (camera->acquire() == 0) {
+                    has_camera = true;
+                    camera->release();
+                }
+            }
             cm.stop();
         }
     }
@@ -199,9 +206,17 @@ protected:
         // Acquire hardware lock FIRST - blocks until available
         ASSERT_TRUE(hw_lock.acquire()) << "Failed to acquire hardware lock";
         
+        // Check if a camera is available AND can be acquired
         libcamera::CameraManager cm;
         if (cm.start() == 0) {
-            has_camera = !cm.cameras().empty();
+            auto cameras = cm.cameras();
+            if (!cameras.empty()) {
+                auto camera = cameras[0];
+                if (camera->acquire() == 0) {
+                    has_camera = true;
+                    camera->release();
+                }
+            }
             cm.stop();
         }
         
@@ -454,9 +469,17 @@ protected:
         if (!hw_lock.acquire()) {
             return false;
         }
+        // Check if a camera is available AND can be acquired
         libcamera::CameraManager cm;
         if (cm.start() == 0) {
-            has_camera = !cm.cameras().empty();
+            auto cameras = cm.cameras();
+            if (!cameras.empty()) {
+                auto camera = cameras[0];
+                if (camera->acquire() == 0) {
+                    has_camera = true;
+                    camera->release();
+                }
+            }
             cm.stop();
         }
         return has_camera;

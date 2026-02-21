@@ -1,4 +1,6 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/camera_core.dir/src/buffer/raw_ring_buffer.cpp.o"
+  "CMakeFiles/camera_core.dir/src/buffer/raw_ring_buffer.cpp.o.d"
   "CMakeFiles/camera_core.dir/src/buffer/ring_buffer.cpp.o"
   "CMakeFiles/camera_core.dir/src/buffer/ring_buffer.cpp.o.d"
   "CMakeFiles/camera_core.dir/src/buffer/shared_memory.cpp.o"

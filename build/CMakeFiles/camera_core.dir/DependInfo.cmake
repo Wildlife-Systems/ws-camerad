@@ -8,6 +8,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 
 # The set of dependency files which are needed:
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
+  "/home/edwab/ws-camera-d/src/buffer/raw_ring_buffer.cpp" "CMakeFiles/camera_core.dir/src/buffer/raw_ring_buffer.cpp.o" "gcc" "CMakeFiles/camera_core.dir/src/buffer/raw_ring_buffer.cpp.o.d"
   "/home/edwab/ws-camera-d/src/buffer/ring_buffer.cpp" "CMakeFiles/camera_core.dir/src/buffer/ring_buffer.cpp.o" "gcc" "CMakeFiles/camera_core.dir/src/buffer/ring_buffer.cpp.o.d"
   "/home/edwab/ws-camera-d/src/buffer/shared_memory.cpp" "CMakeFiles/camera_core.dir/src/buffer/shared_memory.cpp.o" "gcc" "CMakeFiles/camera_core.dir/src/buffer/shared_memory.cpp.o.d"
   "/home/edwab/ws-camera-d/src/camera/camera_manager.cpp" "CMakeFiles/camera_core.dir/src/camera/camera_manager.cpp.o" "gcc" "CMakeFiles/camera_core.dir/src/camera/camera_manager.cpp.o.d"
