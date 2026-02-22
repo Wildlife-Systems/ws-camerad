@@ -1,7 +1,7 @@
 report.md
 examples/bench_motion.cpp
 examples/bench_motion.py
-build/bench_motion
+build/
 obj-aarch64-linux-gnu/
 debian/files
 debian/*.debhelper

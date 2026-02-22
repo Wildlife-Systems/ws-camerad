@@ -1,5 +1,0 @@
-if(EXISTS "/home/edwab/ws-camera-d/build/tests/camera_daemon_tests[1]_tests.cmake")
-  include("/home/edwab/ws-camera-d/build/tests/camera_daemon_tests[1]_tests.cmake")
-else()
-  add_test(camera_daemon_tests_NOT_BUILT camera_daemon_tests_NOT_BUILT)
-endif()

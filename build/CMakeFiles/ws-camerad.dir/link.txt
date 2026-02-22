@@ -1,1 +1,0 @@
-/usr/bin/c++ -O3 -DNDEBUG "CMakeFiles/ws-camerad.dir/src/main.cpp.o" -o ws-camerad  libcamera_core.a -lcamera -lcamera-base -ljpeg -lpthread -lrt -lgstrtspserver-1.0 -lgstapp-1.0 -lgstbase-1.0 -lgstreamer-1.0 -lgobject-2.0 -lglib-2.0 
