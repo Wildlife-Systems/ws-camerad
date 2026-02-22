@@ -1,5 +1,7 @@
 # ws-camerad
 
+[![Build](https://github.com/Wildlife-Systems/ws-camerad/actions/workflows/build.yml/badge.svg)](https://github.com/Wildlife-Systems/ws-camerad/actions/workflows/build.yml)
+
 A multi-consumer camera daemon for Raspberry Pi sensor networks.
 
 In distributed camera-based monitoring systems, the principal challenge is not frame acquisition but rather the concurrent distribution of captured frames to multiple consumers. Motion detectors, machine learning classifiers, human operators, and archival systems each require access to the same frame data, potentially at different times and in different formats.

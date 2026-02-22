@@ -1,0 +1,41 @@
+name: Build
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            cmake \
+            build-essential \
+            pkg-config \
+            libcamera-dev \
+            libjpeg-dev \
+            libgtest-dev \
+            libgstreamer1.0-dev \
+            libgstreamer-plugins-base1.0-dev \
+            libglib2.0-dev \
+            gstreamer1.0-plugins-base \
+            gstreamer1.0-rtsp
+
+      - name: Configure
+        run: cmake -B build -DBUILD_TESTING=ON
+
+      - name: Build
+        run: cmake --build build -j$(nproc)
+
+      - name: Run unit tests
+        run: |
+          cd build
+          ctest --output-on-failure --timeout 30 -R "unit"
