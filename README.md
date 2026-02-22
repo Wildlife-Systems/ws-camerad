@@ -1,6 +1,6 @@
 # ws-camerad
 
-[![Build](https://github.com/Wildlife-Systems/ws-camerad/actions/workflows/build.yml/badge.svg)](https://github.com/Wildlife-Systems/ws-camerad/actions/workflows/build.yml)
+[![Build](https://github.com/Wildlife-Systems/ws-camerad/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/Wildlife-Systems/ws-camerad/actions/workflows/build.yml)
 
 A multi-consumer camera daemon for Raspberry Pi sensor networks.
 
