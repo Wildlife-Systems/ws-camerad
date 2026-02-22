@@ -27,24 +27,14 @@ ws-camerad is intended for custom deployments that require reliable, shared came
 - Burst capture mode for rapid multi-frame acquisition
 - Virtual camera output via v4l2loopback kernel module
 
-## Architecture Overview
+## Architecture
 
-```
-┌─────────────────────────────────────────────────────────┐
-│                       ws-camerad                        │
-│                  (C++, libcamera core)                  │
-└───────────┬────────────────┬──────────────┬─────────────┘
-            │                │              │
-      Shared Memory      UNIX Socket    RTSP Stream
-     (frames / H.264)     (control)      (network)
-            │                │              │
-       ┌────┴─────┐          │              │
-       │          │          │              │
-┌──────▼──┐ ┌─────▼──┐ ┌─────▼─────┐ ┌──────▼────────┐
-│    C++  │ │ Python │ │ CLI tools │ │    Remote     │
-│ consumer│ │consumer│ │ / scripts │ │    server     │
-└─────────┘ └────────┘ └───────────┘ └───────────────┘
-```
+For detailed technical descriptions of the daemon's internals and usage, see [Architecture of ws-camerad](https://ebaker.me.uk/2026/02/22/architecture-of-ws-camerad.html)
+
+## Usage guides
+
+- [Rotating a Pi Camera Feed 90° with ws-camerad](https://ebaker.me.uk/2026/02/21/rotating-pi-camera-feed-with-ws-camerad.html) — configuring software rotation via v4l2loopback
+- [Switching Pi NoIR Camera Profiles at Runtime — Without Restarting Anything](https://ebaker.me.uk/2026/02/17/switching-pi-camera-colour-profiles.html) — runtime tuning file switching
 
 ## Building from Source
 
@@ -305,15 +295,6 @@ rotation = 90
 | 90°/270° | NEON SIMD 8×8 transpose | ~7ms |
 
 The Raspberry Pi ISP natively supports only horizontal and vertical flip operations. For 90° and 270° rotations, the daemon performs software rotation of all three YUV420 planes using an ARM NEON 8×8 block transpose algorithm with parallel processing of the Y, U, and V planes.
-
-Performance characteristics at 1280×960 @ 30fps on Cortex-A72:
-
-| Metric | rotation=0 | rotation=90 |
-|--------|-----------|-------------|
-| CPU per frame | ~0ms (DMABUF zero-copy) | ~7ms (NEON rotate) |
-| Memory | No extra buffer | +1.8MB |
-| Encoder input | DMABUF | USERPTR |
-| Output dimensions | 1280×960 | 960×1280 |
 
 All downstream consumers receive pre-rotated frames without additional processing.
 
