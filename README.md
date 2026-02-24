@@ -323,7 +323,21 @@ echo "SET tuning_file imx219_noir.json" | socat - UNIX-CONNECT:/run/ws-camerad/c
 
 # Switch back to standard profile at sunrise
 echo "SET tuning_file imx219.json" | socat - UNIX-CONNECT:/run/ws-camerad/control.sock
+
 ```
+
+## Troubleshooting
+
+### No cameras detected
+
+If `rpicam-hello --list-cameras` reports no cameras and the camera module works on another Pi, the device tree overlay files in `/boot/firmware/overlays/` may be missing or incomplete. Reinstall `raspi-firmware` to restore them:
+
+```bash
+sudo apt-get install --reinstall raspi-firmware
+sudo reboot
+```
+
+Also ensure `camera_auto_detect=1` and `dtparam=i2c_arm=on` are set (not commented out) in `/boot/firmware/config.txt`.
 
 ## License
 
