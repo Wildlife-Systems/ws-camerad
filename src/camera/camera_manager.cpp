@@ -6,8 +6,46 @@
 #include <unistd.h>
 #include <cstring>
 #include <cstdlib>
+#include <fstream>
+#include <filesystem>
 
 namespace camera_daemon {
+
+namespace {
+
+void log_camera_diagnostics() {
+    // Check if CSI port is enabled in device tree
+    auto read_status = [](const char* path) -> std::string {
+        std::ifstream f(path);
+        if (!f) return "";
+        std::string s;
+        std::getline(f, s);
+        // Device tree strings may contain trailing null
+        while (!s.empty() && s.back() == '\0') s.pop_back();
+        return s;
+    };
+
+    std::string csi0 = read_status("/sys/firmware/devicetree/base/soc/csi@7e800000/status");
+    std::string csi1 = read_status("/sys/firmware/devicetree/base/soc/csi@7e801000/status");
+
+    if (csi0 == "disabled" && csi1 == "disabled") {
+        LOG_ERROR("Both CSI ports are disabled in the device tree.");
+        LOG_ERROR("This usually means the camera overlay failed to load.");
+        LOG_ERROR("Check that raspi-firmware is fully installed:");
+        LOG_ERROR("  sudo apt-get install --reinstall raspi-firmware");
+        LOG_ERROR("Verify overlay files exist:");
+        LOG_ERROR("  ls /boot/firmware/overlays/imx219.dtbo");
+        LOG_ERROR("Ensure /boot/firmware/config.txt contains:");
+        LOG_ERROR("  camera_auto_detect=1");
+        LOG_ERROR("  dtparam=i2c_arm=on");
+    } else {
+        LOG_ERROR("CSI port is enabled but no camera was detected on I2C.");
+        LOG_ERROR("Check the ribbon cable connection at both ends.");
+        LOG_ERROR("Try a different cable if available.");
+    }
+}
+
+} // anonymous namespace
 
 CameraManager::CameraManager() = default;
 
@@ -32,7 +70,9 @@ bool CameraManager::initialize(const std::string& tuning_file) {
     LOG_INFO("Initializing camera manager");
     
     // Set tuning file for NoIR or other specialized camera modules
-    if (!tuning_file.empty()) {
+    // "default", "auto", or empty string all mean: use libcamera auto-detect
+    bool use_default = tuning_file.empty() || tuning_file == "default" || tuning_file == "auto";
+    if (!use_default) {
         // Resolve relative names to full path under standard libcamera IPA directory
         std::string tuning_path = tuning_file;
         if (tuning_file.find('/') == std::string::npos) {
@@ -57,6 +97,7 @@ bool CameraManager::initialize(const std::string& tuning_file) {
     auto cameras = cm_->cameras();
     if (cameras.empty()) {
         LOG_ERROR("No cameras found");
+        log_camera_diagnostics();
         return false;
     }
 

@@ -24,7 +24,8 @@ Depends: ${shlibs:Depends},
          gstreamer1.0-plugins-base,
          gstreamer1.0-plugins-good,
          gstreamer1.0-rtsp
-Recommends: python3
+Recommends: python3,
+            raspi-firmware
 Description: High-performance camera daemon for Raspberry Pi
  ws-camerad is a high-performance multi-consumer camera daemon designed
  for Raspberry Pi with libcamera. It provides:
