@@ -10,8 +10,9 @@
 
 namespace camera_daemon {
 
-ClipExtractor::ClipExtractor(const Config& config, EncodedRingBuffer& ring_buffer)
-    : config_(config), ring_buffer_(ring_buffer) {
+ClipExtractor::ClipExtractor(const Config& config, EncodedRingBuffer& ring_buffer,
+                             AudioReader* audio_reader)
+    : config_(config), ring_buffer_(ring_buffer), audio_reader_(audio_reader) {
     // Ensure output directory exists
     std::filesystem::create_directories(config_.output_dir);
 }
@@ -390,45 +391,149 @@ std::string ClipExtractor::write_mp4(const std::vector<EncodedFrame>& frames, co
 #ifdef HAVE_GSTREAMER
     std::string mp4_path = base_path + ".mp4";
 
-    // Create pipeline: appsrc ! h264parse ! mp4mux ! filesink
+    // Determine time range of the clip for audio extraction
+    uint64_t clip_start_us = frames.front().metadata.timestamp_us;
+    uint64_t clip_end_us = frames.back().metadata.timestamp_us;
+
+    // Extract matching audio data if audio reader is available
+    std::vector<uint8_t> audio_data;
+    bool have_audio = false;
+    uint32_t audio_rate = 0;
+    uint16_t audio_channels = 0;
+    uint16_t audio_bits = 0;
+    if (audio_reader_ && audio_reader_->is_running()) {
+        audio_data = audio_reader_->extract_range(clip_start_us, clip_end_us);
+        if (!audio_data.empty()) {
+            have_audio = true;
+            audio_rate = audio_reader_->sample_rate();
+            audio_channels = audio_reader_->channels();
+            audio_bits = audio_reader_->bits_per_sample();
+            LOG_DEBUG("Audio for clip: ", audio_data.size(), " bytes (",
+                      audio_rate, " Hz, ", audio_channels, " ch)");
+        }
+    }
+
+    // Create pipeline elements
     GstElement* pipeline = gst_pipeline_new("mp4-writer");
-    GstElement* appsrc = gst_element_factory_make("appsrc", "source");
+    GstElement* v_appsrc = gst_element_factory_make("appsrc", "video-source");
     GstElement* h264parse = gst_element_factory_make("h264parse", "parser");
     GstElement* mp4mux = gst_element_factory_make("mp4mux", "muxer");
     GstElement* filesink = gst_element_factory_make("filesink", "sink");
 
-    if (!pipeline || !appsrc || !h264parse || !mp4mux || !filesink) {
+    if (!pipeline || !v_appsrc || !h264parse || !mp4mux || !filesink) {
         LOG_WARN("Failed to create GStreamer elements for MP4 writing");
         if (pipeline) gst_object_unref(pipeline);
-        if (appsrc) gst_object_unref(appsrc);
+        if (v_appsrc) gst_object_unref(v_appsrc);
         if (h264parse) gst_object_unref(h264parse);
         if (mp4mux) gst_object_unref(mp4mux);
         if (filesink) gst_object_unref(filesink);
         return "";
     }
 
-    // Configure elements
-    g_object_set(appsrc,
+    // Configure video appsrc
+    g_object_set(v_appsrc,
         "stream-type", 0,  // GST_APP_STREAM_TYPE_STREAM
         "format", GST_FORMAT_TIME,
         "is-live", FALSE,
         nullptr);
     
-    // Set caps for H.264
-    GstCaps* caps = gst_caps_new_simple("video/x-h264",
+    GstCaps* vcaps = gst_caps_new_simple("video/x-h264",
         "stream-format", G_TYPE_STRING, "byte-stream",
         "alignment", G_TYPE_STRING, "au",
         "framerate", GST_TYPE_FRACTION, 30, 1,
         nullptr);
-    gst_app_src_set_caps(GST_APP_SRC(appsrc), caps);
-    gst_caps_unref(caps);
+    gst_app_src_set_caps(GST_APP_SRC(v_appsrc), vcaps);
+    gst_caps_unref(vcaps);
 
     g_object_set(filesink, "location", mp4_path.c_str(), nullptr);
 
     // Build pipeline
-    gst_bin_add_many(GST_BIN(pipeline), appsrc, h264parse, mp4mux, filesink, nullptr);
-    if (!gst_element_link_many(appsrc, h264parse, mp4mux, filesink, nullptr)) {
-        LOG_WARN("Failed to link GStreamer pipeline for MP4 writing");
+    gst_bin_add_many(GST_BIN(pipeline), v_appsrc, h264parse, mp4mux, filesink, nullptr);
+
+    // Audio branch (optional)
+    GstElement* a_appsrc = nullptr;
+    GstElement* audioconvert = nullptr;
+    GstElement* audio_encoder = nullptr;
+
+    if (have_audio) {
+        a_appsrc = gst_element_factory_make("appsrc", "audio-source");
+        audioconvert = gst_element_factory_make("audioconvert", "aconv");
+        // Try AAC first, fall back to raw
+        audio_encoder = gst_element_factory_make("avenc_aac", "aenc");
+        if (!audio_encoder) {
+            audio_encoder = gst_element_factory_make("voaacenc", "aenc");
+        }
+
+        if (a_appsrc && audioconvert && audio_encoder) {
+            g_object_set(a_appsrc,
+                "stream-type", 0,
+                "format", GST_FORMAT_TIME,
+                "is-live", FALSE,
+                nullptr);
+
+            const char* fmt = (audio_bits == 16) ? "S16LE" : "S32LE";
+            GstCaps* acaps = gst_caps_new_simple("audio/x-raw",
+                "format", G_TYPE_STRING, fmt,
+                "rate", G_TYPE_INT, static_cast<int>(audio_rate),
+                "channels", G_TYPE_INT, static_cast<int>(audio_channels),
+                "layout", G_TYPE_STRING, "interleaved",
+                nullptr);
+            gst_app_src_set_caps(GST_APP_SRC(a_appsrc), acaps);
+            gst_caps_unref(acaps);
+
+            gst_bin_add_many(GST_BIN(pipeline), a_appsrc, audioconvert, audio_encoder, nullptr);
+
+            if (!gst_element_link_many(a_appsrc, audioconvert, audio_encoder, nullptr)) {
+                LOG_WARN("Failed to link audio branch");
+                have_audio = false;
+            } else {
+                // Link audio encoder to muxer's audio pad
+                GstPad* aenc_src = gst_element_get_static_pad(audio_encoder, "src");
+                GstPad* mux_audio = gst_element_request_pad_simple(mp4mux, "audio_%u");
+                if (aenc_src && mux_audio) {
+                    if (gst_pad_link(aenc_src, mux_audio) != GST_PAD_LINK_OK) {
+                        LOG_WARN("Failed to link audio to muxer");
+                        have_audio = false;
+                    }
+                    gst_object_unref(mux_audio);
+                } else {
+                    have_audio = false;
+                }
+                if (aenc_src) gst_object_unref(aenc_src);
+            }
+        } else {
+            LOG_WARN("Audio encoder not available, clip will be video-only");
+            have_audio = false;
+            if (a_appsrc) gst_object_unref(a_appsrc);
+            if (audioconvert) gst_object_unref(audioconvert);
+            if (audio_encoder) gst_object_unref(audio_encoder);
+            a_appsrc = nullptr;
+        }
+    }
+
+    // Link video branch: appsrc ! h264parse ! mp4mux
+    if (!gst_element_link(v_appsrc, h264parse)) {
+        LOG_WARN("Failed to link video appsrc to h264parse");
+        gst_object_unref(pipeline);
+        return "";
+    }
+
+    GstPad* parse_src = gst_element_get_static_pad(h264parse, "src");
+    GstPad* mux_video = gst_element_request_pad_simple(mp4mux, "video_%u");
+    if (!parse_src || !mux_video ||
+        gst_pad_link(parse_src, mux_video) != GST_PAD_LINK_OK) {
+        LOG_WARN("Failed to link h264parse to mp4mux");
+        if (parse_src) gst_object_unref(parse_src);
+        if (mux_video) gst_object_unref(mux_video);
+        gst_object_unref(pipeline);
+        return "";
+    }
+    gst_object_unref(parse_src);
+    gst_object_unref(mux_video);
+
+    // Link muxer to filesink
+    if (!gst_element_link(mp4mux, filesink)) {
+        LOG_WARN("Failed to link mp4mux to filesink");
         gst_object_unref(pipeline);
         return "";
     }
@@ -436,19 +541,18 @@ std::string ClipExtractor::write_mp4(const std::vector<EncodedFrame>& frames, co
     // Start pipeline
     gst_element_set_state(pipeline, GST_STATE_PLAYING);
 
-    // Push frames with timestamps
-    uint64_t base_ts = frames.empty() ? 0 : frames[0].metadata.timestamp_us;
+    // Push video frames with timestamps
+    uint64_t base_ts = frames[0].metadata.timestamp_us;
     size_t total_bytes = 0;
     
     for (const auto& frame : frames) {
         GstBuffer* buffer = gst_buffer_new_allocate(nullptr, frame.data.size(), nullptr);
         gst_buffer_fill(buffer, 0, frame.data.data(), frame.data.size());
         
-        // Set timestamps (convert from microseconds to nanoseconds)
         uint64_t pts_ns = (frame.metadata.timestamp_us - base_ts) * 1000;
         GST_BUFFER_PTS(buffer) = pts_ns;
         GST_BUFFER_DTS(buffer) = pts_ns;
-        GST_BUFFER_DURATION(buffer) = GST_SECOND / 30;  // 30fps
+        GST_BUFFER_DURATION(buffer) = GST_SECOND / 30;
         
         if (frame.metadata.is_keyframe) {
             GST_BUFFER_FLAG_UNSET(buffer, GST_BUFFER_FLAG_DELTA_UNIT);
@@ -456,16 +560,34 @@ std::string ClipExtractor::write_mp4(const std::vector<EncodedFrame>& frames, co
             GST_BUFFER_FLAG_SET(buffer, GST_BUFFER_FLAG_DELTA_UNIT);
         }
 
-        GstFlowReturn ret = gst_app_src_push_buffer(GST_APP_SRC(appsrc), buffer);
+        GstFlowReturn ret = gst_app_src_push_buffer(GST_APP_SRC(v_appsrc), buffer);
         if (ret != GST_FLOW_OK) {
-            LOG_WARN("GStreamer buffer push failed: ", ret);
+            LOG_WARN("Video buffer push failed: ", ret);
             break;
         }
         total_bytes += frame.data.size();
     }
 
-    // Signal end of stream
-    gst_app_src_end_of_stream(GST_APP_SRC(appsrc));
+    gst_app_src_end_of_stream(GST_APP_SRC(v_appsrc));
+
+    // Push audio data as a single buffer
+    if (have_audio && a_appsrc && !audio_data.empty()) {
+        GstBuffer* abuf = gst_buffer_new_allocate(nullptr, audio_data.size(), nullptr);
+        gst_buffer_fill(abuf, 0, audio_data.data(), audio_data.size());
+        GST_BUFFER_PTS(abuf) = 0;
+        GST_BUFFER_DTS(abuf) = 0;
+
+        // Duration = total samples / sample_rate
+        uint32_t bytes_per_frame = audio_channels * (audio_bits / 8);
+        uint64_t total_audio_frames = audio_data.size() / bytes_per_frame;
+        GST_BUFFER_DURATION(abuf) = gst_util_uint64_scale(
+            total_audio_frames, GST_SECOND, audio_rate);
+
+        gst_app_src_push_buffer(GST_APP_SRC(a_appsrc), abuf);
+        gst_app_src_end_of_stream(GST_APP_SRC(a_appsrc));
+
+        total_bytes += audio_data.size();
+    }
 
     // Wait for EOS or error
     GstBus* bus = gst_element_get_bus(pipeline);
@@ -493,7 +615,8 @@ std::string ClipExtractor::write_mp4(const std::vector<EncodedFrame>& frames, co
 
     if (success) {
         total_bytes_written_ += total_bytes;
-        LOG_DEBUG("Wrote ", frames.size(), " frames to ", mp4_path);
+        LOG_DEBUG("Wrote ", frames.size(), " video frames",
+                  (have_audio ? " + audio" : ""), " to ", mp4_path);
         return mp4_path;
     }
     

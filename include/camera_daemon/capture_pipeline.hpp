@@ -4,7 +4,6 @@
 #include "camera_manager.hpp"
 #include "v4l2_encoder.hpp"
 #include "ring_buffer.hpp"
-#include "raw_ring_buffer.hpp"
 #include "shared_memory.hpp"
 #include "frame_notifier.hpp"
 #include "still_capture.hpp"
@@ -12,6 +11,7 @@
 #include "rtsp_server.hpp"
 #include "frame_rotator.hpp"
 #include "v4l2_loopback.hpp"
+#include "audio_reader.hpp"
 #include <memory>
 
 namespace camera_daemon {
@@ -118,7 +118,6 @@ private:
     bool encoder_initialized_ = false;
     V4L2Encoder::Config pending_enc_config_;
     std::unique_ptr<EncodedRingBuffer> ring_buffer_;
-    std::unique_ptr<RawRingBuffer> raw_ring_buffer_;        // Raw frames for past stills
     std::unique_ptr<FramePublisher> frame_publisher_;      // Raw YUV frames
     std::unique_ptr<FramePublisher> bgr_frame_publisher_;  // BGR frames for OpenCV
     std::unique_ptr<FrameNotifier> frame_notifier_;        // Notification socket
@@ -132,14 +131,11 @@ private:
     // Virtual camera outputs (v4l2loopback)
     std::vector<std::unique_ptr<V4L2LoopbackOutput>> virtual_cameras_;
 
+    // Audio reader (optional, for muxing audio into clips)
+    std::unique_ptr<AudioReader> audio_reader_;
+
     // BGR conversion buffer
     std::vector<uint8_t> bgr_buffer_;
-
-    // YUV420 conversion buffer (for YUYV→YUV420 or MJPEG→YUV420)
-    std::vector<uint8_t> yuv420_buffer_;
-
-    // Pixel format the camera actually delivers (may differ from YUV420)
-    uint8_t camera_pixel_format_ = PIXFMT_YUV420;
 
     // Statistics
     std::atomic<uint64_t> frames_captured_{0};

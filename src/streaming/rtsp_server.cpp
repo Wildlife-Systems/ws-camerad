@@ -1,23 +1,14 @@
 #include "camera_daemon/rtsp_server.hpp"
 #include "camera_daemon/logger.hpp"
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <poll.h>
 #include <cstring>
 #include <memory>
 
-#ifdef HAVE_GSTREAMER
 #include <gst/gst.h>
 #include <gst/rtsp-server/rtsp-server.h>
 #include <gst/app/gstappsrc.h>
-#endif
 
 namespace camera_daemon {
 
-#ifdef HAVE_GSTREAMER
 // GStreamer data structure - defined in anonymous namespace since it's implementation detail
 namespace {
 struct GstDataImpl {
@@ -31,6 +22,13 @@ struct GstDataImpl {
     // Active appsrc elements (one per connected client's media)
     std::mutex appsrc_mutex;
     std::vector<GstAppSrc*> appsrcs;
+    
+    // Audio appsrc elements (parallel to appsrcs)
+    std::vector<GstAppSrc*> audio_appsrcs;
+    bool audio_enabled = false;
+    uint32_t audio_sample_rate = 0;
+    uint16_t audio_channels = 0;
+    uint16_t audio_bits = 0;
     
     // Cached keyframe for immediate playback when clients connect
     std::mutex keyframe_mutex;
@@ -49,6 +47,7 @@ void media_unprepared_cb(GstRTSPMedia* media, gpointer user_data) {
     
     std::lock_guard<std::mutex> lock(gst_data->appsrc_mutex);
     gst_data->appsrcs.clear();  // Clear since shared media is done
+    gst_data->audio_appsrcs.clear();
     LOG_INFO("RTSP media unprepared, appsrc cleared");
 }
 
@@ -123,19 +122,65 @@ void media_configure_cb(GstRTSPMediaFactory* factory, GstRTSPMedia* media, gpoin
         gst_object_unref(appsrc);
     }
     
+    // Configure audio appsrc if audio is enabled
+    if (gst_data->audio_enabled) {
+        GstElement* audio_src = gst_bin_get_by_name_recurse_up(GST_BIN(element), "audiosource");
+        if (audio_src) {
+            g_object_set(audio_src,
+                "stream-type", GST_APP_STREAM_TYPE_STREAM,
+                "format", GST_FORMAT_TIME,
+                "is-live", TRUE,
+                "do-timestamp", TRUE,
+                "max-bytes", G_GUINT64_CONSTANT(0),
+                "block", FALSE,
+                nullptr);
+            
+            // Set caps for raw PCM audio (matching ws-audiod bit depth)
+            const char* audio_fmt = (gst_data->audio_bits == 32) ? "S32LE" : "S16LE";
+            GstCaps* audio_caps = gst_caps_new_simple("audio/x-raw",
+                "format", G_TYPE_STRING, audio_fmt,
+                "rate", G_TYPE_INT, (int)gst_data->audio_sample_rate,
+                "channels", G_TYPE_INT, (int)gst_data->audio_channels,
+                "layout", G_TYPE_STRING, "interleaved",
+                nullptr);
+            gst_app_src_set_caps(GST_APP_SRC(audio_src), audio_caps);
+            gst_caps_unref(audio_caps);
+            
+            {
+                std::lock_guard<std::mutex> lock(gst_data->appsrc_mutex);
+                if (std::find(gst_data->audio_appsrcs.begin(), gst_data->audio_appsrcs.end(),
+                              GST_APP_SRC(audio_src)) == gst_data->audio_appsrcs.end()) {
+                    gst_data->audio_appsrcs.push_back(GST_APP_SRC(audio_src));
+                }
+            }
+            
+            // Push a silent buffer so GStreamer can preroll the audio appsrc
+            // (analogous to pushing the cached keyframe for video)
+            size_t silence_bytes = static_cast<size_t>(gst_data->audio_sample_rate)
+                * gst_data->audio_channels * (gst_data->audio_bits / 8) / 50; // 20ms
+            GstBuffer* silence = gst_buffer_new_allocate(nullptr, silence_bytes, nullptr);
+            gst_buffer_memset(silence, 0, 0, silence_bytes);
+            GST_BUFFER_PTS(silence) = GST_CLOCK_TIME_NONE;
+            GST_BUFFER_DTS(silence) = GST_CLOCK_TIME_NONE;
+            gst_app_src_push_buffer(GST_APP_SRC(audio_src), silence);
+
+            LOG_INFO("RTSP audio appsrc configured: ", gst_data->audio_sample_rate,
+                     " Hz, ", gst_data->audio_channels, " ch");
+            gst_object_unref(audio_src);
+        }
+    }
+    
     gst_object_unref(element);
 }
 } // anonymous namespace
 
 // Wrapper struct that wraps the impl
 struct RTSPServer::GstData : public GstDataImpl {};
-#endif
 
 RTSPServer::RTSPServer(const Config& config) : config_(config) {
-#ifdef HAVE_GSTREAMER
     gst_data_ = std::make_unique<GstData>();
     gst_data_->owner = this;
-#endif
+    gst_data_->audio_enabled = config.enable_audio;
 }
 
 RTSPServer::~RTSPServer() {
@@ -147,7 +192,6 @@ bool RTSPServer::start() {
         return true;
     }
 
-#ifdef HAVE_GSTREAMER
     gst_init(nullptr, nullptr);
     
     gst_data_->server = gst_rtsp_server_new();
@@ -158,12 +202,36 @@ bool RTSPServer::start() {
     
     // Create launch string with appsrc
     // Minimal queue for low-latency live streaming
-    std::string launch = "( appsrc name=source is-live=true format=time ! "
-                         "queue max-size-buffers=1 max-size-time=0 max-size-bytes=0 leaky=downstream ! "
-                         "h264parse ! rtph264pay name=pay0 pt=96 config-interval=1 )";
+    std::string launch;
+    if (config_.enable_audio && gst_data_->audio_sample_rate > 0) {
+        // Video + audio pipeline
+        // Audio caps must be in the launch string so GStreamer can construct
+        // the SDP during DESCRIBE without waiting for appsrc data
+        std::string audio_format = (gst_data_->audio_bits == 32) ? "S32LE" : "S16LE";
+        std::string audio_caps = "audio/x-raw,format=" + audio_format + ",rate="
+            + std::to_string(gst_data_->audio_sample_rate)
+            + ",channels=" + std::to_string(gst_data_->audio_channels)
+            + ",layout=interleaved";
+        launch = "( appsrc name=source is-live=true format=time do-timestamp=true min-latency=0 ! "
+                 "queue max-size-buffers=1 max-size-time=0 max-size-bytes=0 leaky=downstream ! "
+                 "h264parse ! rtph264pay name=pay0 pt=96 config-interval=1 "
+                 "appsrc name=audiosource is-live=true format=time do-timestamp=true min-latency=0 "
+                 "caps=\"" + audio_caps + "\" ! "
+                 "queue max-size-buffers=10 max-size-time=500000000 max-size-bytes=0 leaky=downstream ! "
+                 "audioconvert ! audioresample ! rtpL16pay name=pay1 pt=97 )";
+    } else {
+        // Video only pipeline
+        launch = "( appsrc name=source is-live=true format=time ! "
+                 "queue max-size-buffers=1 max-size-time=0 max-size-bytes=0 leaky=downstream ! "
+                 "h264parse ! rtph264pay name=pay0 pt=96 config-interval=1 )";
+    }
     
     gst_rtsp_media_factory_set_launch(gst_data_->factory, launch.c_str());
     gst_rtsp_media_factory_set_shared(gst_data_->factory, TRUE);
+    
+    // Allow both UDP and TCP transport so clients that can't receive UDP still work
+    gst_rtsp_media_factory_set_protocols(gst_data_->factory,
+        (GstRTSPLowerTrans)(GST_RTSP_LOWER_TRANS_UDP | GST_RTSP_LOWER_TRANS_TCP));
     
     // Connect to media-configure signal to get appsrc when client connects
     g_signal_connect(gst_data_->factory, "media-configure", G_CALLBACK(media_configure_cb), gst_data_.get());
@@ -183,47 +251,6 @@ bool RTSPServer::start() {
     LOG_INFO("RTSP server started on port ", config_.port);
     LOG_INFO("Connect with: vlc rtsp://localhost:", config_.port, config_.mount_point);
     return true;
-#else
-    // Simple TCP-based fallback (raw H.264 streaming)
-    server_fd_ = socket(AF_INET, SOCK_STREAM, 0);
-    if (server_fd_ < 0) {
-        LOG_ERROR("Failed to create server socket: ", strerror(errno));
-        return false;
-    }
-
-    int opt = 1;
-    setsockopt(server_fd_, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt));
-
-    sockaddr_in addr{};
-    addr.sin_family = AF_INET;
-    addr.sin_addr.s_addr = INADDR_ANY;
-    addr.sin_port = htons(config_.port);
-
-    if (bind(server_fd_, reinterpret_cast<sockaddr*>(&addr), sizeof(addr)) < 0) {
-        LOG_ERROR("Failed to bind server socket: ", strerror(errno));
-        close(server_fd_);
-        server_fd_ = -1;
-        return false;
-    }
-
-    if (listen(server_fd_, 5) < 0) {
-        LOG_ERROR("Failed to listen on server socket: ", strerror(errno));
-        close(server_fd_);
-        server_fd_ = -1;
-        return false;
-    }
-
-    // Set non-blocking
-    int flags = fcntl(server_fd_, F_GETFL, 0);
-    fcntl(server_fd_, F_SETFL, flags | O_NONBLOCK);
-
-    running_ = true;
-    server_thread_ = std::thread(&RTSPServer::server_thread_func, this);
-
-    LOG_INFO("Stream server started on port ", config_.port, " (raw H.264 over TCP)");
-    LOG_INFO("Connect with: ffplay tcp://", "localhost:", config_.port);
-    return true;
-#endif
 }
 
 void RTSPServer::stop() {
@@ -235,7 +262,6 @@ void RTSPServer::stop() {
     running_ = false;
     frame_cv_.notify_all();
 
-#ifdef HAVE_GSTREAMER
     if (gst_data_->loop) {
         g_main_loop_quit(gst_data_->loop);
     }
@@ -248,6 +274,7 @@ void RTSPServer::stop() {
     {
         std::lock_guard<std::mutex> lock(gst_data_->appsrc_mutex);
         gst_data_->appsrcs.clear();
+        gst_data_->audio_appsrcs.clear();
     }
     
     if (gst_data_->context) {
@@ -259,32 +286,6 @@ void RTSPServer::stop() {
         g_object_unref(gst_data_->server);
         gst_data_->server = nullptr;
     }
-#else
-    if (server_fd_ >= 0) {
-        shutdown(server_fd_, SHUT_RDWR);
-        close(server_fd_);
-        server_fd_ = -1;
-    }
-
-    if (server_thread_.joinable()) {
-        server_thread_.join();
-    }
-
-    {
-        std::lock_guard<std::mutex> lock(clients_mutex_);
-        for (int fd : client_fds_) {
-            close(fd);
-        }
-        client_fds_.clear();
-        
-        for (auto& t : client_threads_) {
-            if (t.joinable()) {
-                t.join();
-            }
-        }
-        client_threads_.clear();
-    }
-#endif
 
     LOG_INFO("Stream server stopped");
 }
@@ -294,7 +295,6 @@ void RTSPServer::push_frame(const EncodedFrame& frame) {
         return;
     }
 
-#ifdef HAVE_GSTREAMER
     // Cache keyframes for instant playback when clients connect (zero-copy via shared_ptr)
     if (frame.metadata.is_keyframe) {
         std::lock_guard<std::mutex> kf_lock(gst_data_->keyframe_mutex);
@@ -344,27 +344,57 @@ void RTSPServer::push_frame(const EncodedFrame& frame) {
     }
     
     client_count_ = gst_data_->appsrcs.size();
-#else
-    {
-        std::lock_guard<std::mutex> lock(frame_mutex_);
-        
-        // Limit queue size - O(1) with deque
-        while (frame_queue_.size() >= MAX_QUEUE_SIZE) {
-            frame_queue_.pop_front();
-        }
-        
-        frame_queue_.push_back(frame);
+}
+
+void RTSPServer::push_audio(const AudioReader::AudioChunk& chunk) {
+    if (!running_ || !config_.enable_audio) {
+        return;
     }
-    frame_cv_.notify_all();
-#endif
+
+    std::lock_guard<std::mutex> lock(gst_data_->appsrc_mutex);
+
+    if (gst_data_->audio_appsrcs.empty()) {
+        return;
+    }
+
+    static uint64_t audio_push_count = 0;
+    audio_push_count++;
+    if (audio_push_count % 500 == 1) {
+        LOG_INFO("RTSP pushing audio chunk #", audio_push_count,
+                 ", size=", chunk.data.size(), " bytes, frames=", chunk.frame_count,
+                 ", audio_appsrcs=", gst_data_->audio_appsrcs.size());
+    }
+
+    for (auto* audio_appsrc : gst_data_->audio_appsrcs) {
+        GstBuffer* buffer = gst_buffer_new_allocate(nullptr, chunk.data.size(), nullptr);
+
+        GstMapInfo map;
+        if (gst_buffer_map(buffer, &map, GST_MAP_WRITE)) {
+            memcpy(map.data, chunk.data.data(), chunk.data.size());
+            gst_buffer_unmap(buffer, &map);
+        }
+
+        GST_BUFFER_PTS(buffer) = GST_CLOCK_TIME_NONE;
+        GST_BUFFER_DTS(buffer) = GST_CLOCK_TIME_NONE;
+
+        GstFlowReturn ret = gst_app_src_push_buffer(audio_appsrc, buffer);
+        if (ret != GST_FLOW_OK && audio_push_count % 500 == 1) {
+            LOG_WARN("RTSP audio appsrc push failed: ", ret);
+        }
+    }
+}
+
+void RTSPServer::set_audio_format(uint32_t sample_rate, uint16_t channels, uint16_t bits_per_sample) {
+    if (gst_data_) {
+        gst_data_->audio_sample_rate = sample_rate;
+        gst_data_->audio_channels = channels;
+        gst_data_->audio_bits = bits_per_sample;
+        LOG_INFO("RTSP audio format set: ", sample_rate, " Hz, ", channels, " ch, ", bits_per_sample, " bit");
+    }
 }
 
 std::string RTSPServer::get_url() const {
-#ifdef HAVE_GSTREAMER
     return "rtsp://localhost:" + std::to_string(config_.port) + config_.mount_point;
-#else
-    return "tcp://localhost:" + std::to_string(config_.port);
-#endif
 }
 
 size_t RTSPServer::client_count() const {
@@ -379,112 +409,6 @@ RTSPServer::Stats RTSPServer::get_stats() const {
     };
 }
 
-#ifndef HAVE_GSTREAMER
-
-void RTSPServer::server_thread_func() {
-    LOG_DEBUG("Stream server thread started");
-
-    while (running_) {
-        pollfd pfd{};
-        pfd.fd = server_fd_;
-        pfd.events = POLLIN;
-
-        int ret = poll(&pfd, 1, 100);
-        if (ret <= 0 || !running_) {
-            continue;
-        }
-
-        int client_fd = accept(server_fd_, nullptr, nullptr);
-        if (client_fd < 0) {
-            if (errno != EAGAIN && errno != EWOULDBLOCK) {
-                LOG_ERROR("Accept failed: ", strerror(errno));
-            }
-            continue;
-        }
-
-        LOG_INFO("Stream client connected");
-        client_count_++;
-
-        {
-            std::lock_guard<std::mutex> lock(clients_mutex_);
-            client_fds_.push_back(client_fd);
-            client_threads_.emplace_back(&RTSPServer::client_thread_func, this, client_fd);
-        }
-    }
-
-    LOG_DEBUG("Stream server thread stopped");
-}
-
-void RTSPServer::client_thread_func(int client_fd) {
-    uint64_t last_sent_seq = 0;
-
-    while (running_) {
-        EncodedFrame frame;
-        
-        {
-            std::unique_lock<std::mutex> lock(frame_mutex_);
-            frame_cv_.wait_for(lock, std::chrono::milliseconds(100), [this, last_sent_seq]() {
-                return !running_ || (!frame_queue_.empty() && 
-                       frame_queue_.back().metadata.sequence > last_sent_seq);
-            });
-
-            if (!running_) {
-                break;
-            }
-
-            if (frame_queue_.empty()) {
-                continue;
-            }
-
-            // Find the next frame to send (prefer keyframes for new connections)
-            bool found = false;
-            for (const auto& f : frame_queue_) {
-                if (f.metadata.sequence > last_sent_seq) {
-                    if (last_sent_seq == 0 && !f.metadata.is_keyframe) {
-                        continue;  // Wait for keyframe for new clients
-                    }
-                    frame = f;
-                    found = true;
-                    break;
-                }
-            }
-
-            if (!found) {
-                continue;
-            }
-        }
-
-        // Send frame
-        ssize_t written = write(client_fd, frame.data.data(), frame.data.size());
-        if (written <= 0) {
-            if (errno != EAGAIN && errno != EWOULDBLOCK) {
-                LOG_DEBUG("Client disconnected");
-                break;
-            }
-            continue;
-        }
-
-        last_sent_seq = frame.metadata.sequence;
-        frames_sent_++;
-        bytes_sent_ += written;
-    }
-
-    // Remove from client list
-    {
-        std::lock_guard<std::mutex> lock(clients_mutex_);
-        auto it = std::find(client_fds_.begin(), client_fds_.end(), client_fd);
-        if (it != client_fds_.end()) {
-            client_fds_.erase(it);
-        }
-    }
-
-    close(client_fd);
-    client_count_--;
-    LOG_INFO("Stream client disconnected");
-}
-
-#else // HAVE_GSTREAMER
-
 void RTSPServer::gst_thread_func() {
     LOG_DEBUG("GStreamer RTSP thread started");
     
@@ -498,7 +422,5 @@ void RTSPServer::gst_thread_func() {
     
     LOG_DEBUG("GStreamer RTSP thread stopped");
 }
-
-#endif // HAVE_GSTREAMER
 
 } // namespace camera_daemon

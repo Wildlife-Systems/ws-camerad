@@ -78,10 +78,10 @@ private:
     std::mutex mutex_;
 };
 
+} // namespace camera_daemon
+
 #define LOG_DEBUG(...) camera_daemon::Logger::instance().log(camera_daemon::LogLevel::DEBUG, __FILE__, __LINE__, __VA_ARGS__)
 #define LOG_INFO(...)  camera_daemon::Logger::instance().log(camera_daemon::LogLevel::INFO,  __FILE__, __LINE__, __VA_ARGS__)
 #define LOG_WARN(...)  camera_daemon::Logger::instance().log(camera_daemon::LogLevel::WARN,  __FILE__, __LINE__, __VA_ARGS__)
 #define LOG_ERROR(...) camera_daemon::Logger::instance().log(camera_daemon::LogLevel::ERROR, __FILE__, __LINE__, __VA_ARGS__)
 #define LOG_FATAL(...) camera_daemon::Logger::instance().log(camera_daemon::LogLevel::FATAL, __FILE__, __LINE__, __VA_ARGS__)
-
-} // namespace camera_daemon

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "common.hpp"
+#include "audio_reader.hpp"
 #include <string>
 #include <thread>
 #include <atomic>
@@ -24,6 +25,7 @@ public:
         uint32_t height;
         uint32_t framerate;
         bool h265 = false;
+        bool enable_audio = false;
     };
 
     explicit RTSPServer(const Config& config);
@@ -54,6 +56,16 @@ public:
     void push_frame(const EncodedFrame& frame);
 
     /**
+     * Push audio samples to connected clients (called from AudioReader callback).
+     */
+    void push_audio(const AudioReader::AudioChunk& chunk);
+
+    /**
+     * Set the audio format (must be called before clients connect).
+     */
+    void set_audio_format(uint32_t sample_rate, uint16_t channels, uint16_t bits_per_sample);
+
+    /**
      * Get the RTSP URL for this stream.
      */
     std::string get_url() const;
@@ -74,24 +86,11 @@ public:
     Stats get_stats() const;
 
 private:
-#ifdef HAVE_GSTREAMER
     void gst_thread_func();
     
     struct GstData;
     std::unique_ptr<GstData> gst_data_;
     std::thread gst_thread_;
-#else
-    // Simple TCP-based fallback
-    void server_thread_func();
-    void client_thread_func(int client_fd);
-    
-    int server_fd_ = -1;
-    std::thread server_thread_;
-    
-    mutable std::mutex clients_mutex_;
-    std::vector<int> client_fds_;
-    std::vector<std::thread> client_threads_;
-#endif
 
     Config config_;
     std::atomic<bool> running_{false};

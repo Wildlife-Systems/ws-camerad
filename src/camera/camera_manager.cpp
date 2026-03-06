@@ -6,46 +6,8 @@
 #include <unistd.h>
 #include <cstring>
 #include <cstdlib>
-#include <fstream>
-#include <filesystem>
 
 namespace camera_daemon {
-
-namespace {
-
-void log_camera_diagnostics() {
-    // Check if CSI port is enabled in device tree
-    auto read_status = [](const char* path) -> std::string {
-        std::ifstream f(path);
-        if (!f) return "";
-        std::string s;
-        std::getline(f, s);
-        // Device tree strings may contain trailing null
-        while (!s.empty() && s.back() == '\0') s.pop_back();
-        return s;
-    };
-
-    std::string csi0 = read_status("/sys/firmware/devicetree/base/soc/csi@7e800000/status");
-    std::string csi1 = read_status("/sys/firmware/devicetree/base/soc/csi@7e801000/status");
-
-    if (csi0 == "disabled" && csi1 == "disabled") {
-        LOG_ERROR("Both CSI ports are disabled in the device tree.");
-        LOG_ERROR("This usually means the camera overlay failed to load.");
-        LOG_ERROR("Check that raspi-firmware is fully installed:");
-        LOG_ERROR("  sudo apt-get install --reinstall raspi-firmware");
-        LOG_ERROR("Verify overlay files exist:");
-        LOG_ERROR("  ls /boot/firmware/overlays/imx219.dtbo");
-        LOG_ERROR("Ensure /boot/firmware/config.txt contains:");
-        LOG_ERROR("  camera_auto_detect=1");
-        LOG_ERROR("  dtparam=i2c_arm=on");
-    } else {
-        LOG_ERROR("CSI port is enabled but no camera was detected on I2C.");
-        LOG_ERROR("Check the ribbon cable connection at both ends.");
-        LOG_ERROR("Try a different cable if available.");
-    }
-}
-
-} // anonymous namespace
 
 CameraManager::CameraManager() = default;
 
@@ -70,9 +32,7 @@ bool CameraManager::initialize(const std::string& tuning_file) {
     LOG_INFO("Initializing camera manager");
     
     // Set tuning file for NoIR or other specialized camera modules
-    // "default", "auto", or empty string all mean: use libcamera auto-detect
-    bool use_default = tuning_file.empty() || tuning_file == "default" || tuning_file == "auto";
-    if (!use_default) {
+    if (!tuning_file.empty()) {
         // Resolve relative names to full path under standard libcamera IPA directory
         std::string tuning_path = tuning_file;
         if (tuning_file.find('/') == std::string::npos) {
@@ -97,7 +57,6 @@ bool CameraManager::initialize(const std::string& tuning_file) {
     auto cameras = cm_->cameras();
     if (cameras.empty()) {
         LOG_ERROR("No cameras found");
-        log_camera_diagnostics();
         return false;
     }
 
@@ -164,63 +123,15 @@ bool CameraManager::configure(const CameraConfig& config) {
     }
     // For 90°/270°, flips are applied by ISP before software rotation
 
-    // Validate and apply — with format fallback for USB cameras
+    // Validate and apply
     libcamera::CameraConfiguration::Status status = camera_config_->validate();
     if (status == libcamera::CameraConfiguration::Invalid) {
         LOG_ERROR("Camera configuration invalid");
         return false;
     }
-
-    // Check if pixel format was adjusted away from YUV420 (common with USB cameras)
-    if (stream_config.pixelFormat != libcamera::formats::YUV420) {
-        LOG_WARN("Camera does not support YUV420 at requested resolution/framerate");
-        LOG_INFO("Adjusted to: ", stream_config.pixelFormat.toString(), " ",
-                 stream_config.size.width, "x", stream_config.size.height);
-
-        // Try YUYV — most USB cameras support it in raw; we'll convert to YUV420
-        stream_config.size.width = config.width;
-        stream_config.size.height = config.height;
-        stream_config.pixelFormat = libcamera::formats::YUYV;
-        status = camera_config_->validate();
-
-        if (status != libcamera::CameraConfiguration::Invalid &&
-            stream_config.pixelFormat == libcamera::formats::YUYV) {
-            LOG_INFO("Using YUYV: ", stream_config.size.width, "x",
-                     stream_config.size.height, " (will convert to YUV420)");
-        } else {
-            // Fall back to MJPEG — available on virtually all USB cameras at high res
-            stream_config.size.width = config.width;
-            stream_config.size.height = config.height;
-            stream_config.pixelFormat = libcamera::formats::MJPEG;
-            status = camera_config_->validate();
-            if (status == libcamera::CameraConfiguration::Invalid) {
-                LOG_ERROR("Camera supports no usable pixel format");
-                return false;
-            }
-            LOG_INFO("Using MJPEG: ", stream_config.size.width, "x",
-                     stream_config.size.height, " (will decode to YUV420)");
-        }
-    }
-
     if (status == libcamera::CameraConfiguration::Adjusted) {
         LOG_WARN("Camera configuration adjusted");
-        LOG_INFO("Final: ", stream_config.pixelFormat.toString(), " ",
-                 stream_config.size.width, "x", stream_config.size.height);
-    }
-
-    // Update config with actual negotiated dimensions
-    config_.width = stream_config.size.width;
-    config_.height = stream_config.size.height;
-
-    // Record actual pixel format for pipeline to handle conversion
-    auto pf = stream_config.pixelFormat;
-    if (pf == libcamera::formats::YUV420)      actual_pixel_format_ = PIXFMT_YUV420;
-    else if (pf == libcamera::formats::YUYV)   actual_pixel_format_ = PIXFMT_YUYV;
-    else if (pf == libcamera::formats::MJPEG)  actual_pixel_format_ = PIXFMT_MJPEG;
-    else if (pf == libcamera::formats::NV12)   actual_pixel_format_ = PIXFMT_NV12;
-    else {
-        LOG_WARN("Unknown pixel format: ", pf.toString(), ", assuming YUV420");
-        actual_pixel_format_ = PIXFMT_YUV420;
+        LOG_INFO("Adjusted size: ", stream_config.size.width, "x", stream_config.size.height);
     }
 
     int ret = camera_->configure(camera_config_.get());
@@ -409,15 +320,14 @@ void CameraManager::process_frame(libcamera::FrameBuffer* buffer, const libcamer
     FrameMetadata fm;
     fm.timestamp_us = frame_meta.timestamp / 1000;  // Convert from nanoseconds
     fm.sequence = frame_sequence_++;
-    fm.width = stream_config.size.width;
-    fm.height = stream_config.size.height;
+    fm.width = config_.width;
+    fm.height = config_.height;
     fm.stride = actual_stride;  // Use actual stride from libcamera
     fm.size = 0;
     fm.is_keyframe = false;
-    fm.format = actual_pixel_format_;
+    fm.format = 0;  // YUV420 planar
     
-    LOG_DEBUG("Frame ", fm.sequence, ": ", fm.width, "x", fm.height,
-              " stride=", actual_stride, " fmt=", static_cast<int>(fm.format));
+    LOG_DEBUG("Frame ", fm.sequence, ": ", fm.width, "x", fm.height, " stride=", actual_stride);
 
     // Calculate total size and map the buffer
     const std::vector<libcamera::FrameBuffer::Plane>& planes = buffer->planes();
@@ -428,8 +338,8 @@ void CameraManager::process_frame(libcamera::FrameBuffer* buffer, const libcamer
     // Pass DMA-BUF fd for zero-copy encoding
     fm.dmabuf_fd = planes[0].fd.get();
     
-    if (actual_pixel_format_ == PIXFMT_YUV420 && planes.size() >= 3) {
-        // YUV420: three separate planes (Y, U, V)
+    if (planes.size() >= 3) {
+        // All planes use the same fd, find total size needed
         mapped_size = planes[2].offset + planes[2].length;  // Last plane end
         
         mapped_mem = mmap(nullptr, mapped_size, PROT_READ, MAP_SHARED, planes[0].fd.get(), 0);
@@ -440,7 +350,7 @@ void CameraManager::process_frame(libcamera::FrameBuffer* buffer, const libcamer
         
         fm.size = mapped_size;
     } else {
-        // Single plane: YUYV (packed), MJPEG (compressed), or NV12
+        // Fallback: single plane (NV12 or similar)
         const auto& plane = planes[0];
         mapped_size = plane.length + plane.offset;
         
@@ -450,13 +360,7 @@ void CameraManager::process_frame(libcamera::FrameBuffer* buffer, const libcamer
             return;
         }
         
-        if (actual_pixel_format_ == PIXFMT_MJPEG) {
-            // MJPEG: actual compressed data may be smaller than buffer capacity
-            const auto& meta_planes = frame_meta.planes();
-            fm.size = meta_planes.empty() ? plane.length : meta_planes[0].bytesused;
-        } else {
-            fm.size = plane.length;
-        }
+        fm.size = plane.length;
     }
 
     // Call the callback with mapped memory

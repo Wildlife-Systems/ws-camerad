@@ -1,65 +1,77 @@
 # ws-camerad
 
-[![Build](https://github.com/Wildlife-Systems/ws-camerad/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/Wildlife-Systems/ws-camerad/actions/workflows/build.yml)
+A camera daemon for Raspberry Pi sensor networks.
 
-A multi-consumer camera daemon for Raspberry Pi sensor networks.
+When deploying camera-based monitoring at scale, the challenge is not capturing frames—it's making them available to multiple consumers without dropping any. A motion detector, a machine learning classifier, a human operator, and a long-term archive all want the same frames, but at different times and in different formats.
 
-In distributed camera-based monitoring systems, the principal challenge is not frame acquisition but rather the concurrent distribution of captured frames to multiple consumers. Motion detectors, machine learning classifiers, human operators, and archival systems each require access to the same frame data, potentially at different times and in different formats.
+ws-camerad captures continuously and serves many consumers from a single camera. Stills and video clips can be extracted from any point in the rolling buffer, including frames that have already passed.
 
-ws-camerad provides continuous capture with concurrent multi-consumer access through a single camera interface. Still images and video clips may be extracted from any point in the rolling buffer, including frames that have already elapsed.
+## Why ws-camerad
 
-## Motivation
+Only one process can own the camera. This is the fundamental problem.
 
-On Linux-based embedded systems, a single process holds exclusive access to a camera device at any given time. This constraint is the fundamental limitation that ws-camerad addresses.
+| Tool | Multi-process | Pre-event video | Low-latency stills | Notes |
+|------|---------------|-----------------|-------------------|-------|
+| rpicam-apps | No | No | No | Single output only |
+| motion | Web clients only | Yes | No | End-user app, high CPU |
+| GStreamer | Via tee | DIY | DIY | Requires deep expertise |
+| PiCamera2 | Same process only | DIY | Yes | Python GIL limits parallelism |
+| FFmpeg | Single output | No | No | Encoder, not a daemon |
 
-ws-camerad operates as infrastructure rather than an end-user application. The daemon maintains exclusive camera ownership; consumers connect via shared memory (zero-copy frame access), Unix domain socket (control interface), or RTSP (remote access). Consumer process failures are isolated and do not affect the daemon or other connected consumers.
+ws-camerad is infrastructure, not an application. The daemon owns the camera; consumers connect via shared memory (zero-copy frames), Unix socket (control), or TCP (remote). If a consumer crashes, the daemon continues. Other consumers are unaffected.
 
-ws-camerad is intended for custom deployments that require reliable, shared camera infrastructure without reimplementing low-level capture and distribution logic.
+Use rpicam-apps for simple capture. Use motion for a complete surveillance system. Use ws-camerad when building something custom that needs reliable camera infrastructure without reinventing it.
 
 ## Features
 
-- Continuous capture with zero frame loss
-- Concurrent multi-consumer access (e.g. with provided C++ and Python client libraries)
-- On-demand still image capture
-- Pre-event and post-event video clip extraction from rolling buffer
-- Remote streaming via RTSP
-- Hardware-accelerated H.264 encoding via V4L2 M2M
-- Zero-copy frame distribution via POSIX shared memory
-- Software frame rotation (0°/90°/180°/270°) using ARM NEON SIMD
-- Burst capture mode for rapid multi-frame acquisition
-- Virtual camera output via v4l2loopback kernel module
+- Continuous capture without frame drops
+- Multiple concurrent consumers (C++ and Python)
+- On-demand still capture (<25ms latency)
+- Pre/post-event video clips from rolling buffer
+- Remote streaming (TCP)
+- Hardware H.264 encoding via V4L2
+- Zero-copy frame sharing via shared memory
+- Frame rotation (0°/90°/180°/270°) with NEON SIMD
+- Burst capture for rapid multi-still sequences
+- Virtual camera output via v4l2loopback
 
 ## Architecture
 
-For detailed technical descriptions of the daemon's internals and usage, see [Architecture of ws-camerad](https://ebaker.me.uk/2026/02/22/architecture-of-ws-camerad.html)
+```
+┌────────────────────────────┐
+│         ws-camerad         │
+│    (C++, libcamera core)   │
+└────────────┬───────────────┘
+             │
+ ┌───────────┼─────────────┬───────────────┐
+ │           │             │               │
+ │     Shared Memory   UNIX Socket     Network Stream
+ │   (frames / H.264)   (control)        (TCP)
+ │           │             │               │
+┌▼────────┐ ┌▼────────┐ ┌──▼────────┐ ┌───▼─────────┐
+│ C++ CV  │ │ Python  │ │ CLI tools │ │ Remote      │
+│ consumer│ │ consumer│ │ / scripts │ │ server / NVR│
+└─────────┘ └─────────┘ └───────────┘ └─────────────┘
+```
 
-## Usage guides
+## Building
 
-- [Rotating a Pi Camera Feed 90° with ws-camerad](https://ebaker.me.uk/2026/02/21/rotating-pi-camera-feed-with-ws-camerad.html) — configuring software rotation via v4l2loopback
-- [Switching Pi NoIR Camera Profiles at Runtime — Without Restarting Anything](https://ebaker.me.uk/2026/02/17/switching-pi-camera-colour-profiles.html) — runtime tuning file switching
-
-## Building from Source
-
-### Prerequisites
-
-The following packages are required on Raspberry Pi OS:
+Dependencies (Raspberry Pi OS):
 
 ```bash
 sudo apt update
 sudo apt install -y cmake build-essential libcamera-dev libjpeg-dev pkg-config
 ```
 
-### Compilation
+Build:
 
 ```bash
-git clone https://github.com/Wildlife-Systems/ws-camerad.git
-cd ws-camerad
 mkdir build && cd build
 cmake ..
 make -j4
 ```
 
-### Installation
+Install:
 
 ```bash
 sudo make install
@@ -99,7 +111,7 @@ sudo systemctl start ws-camerad
 
 ### Commands
 
-The daemon accepts commands via the Unix domain control socket:
+Connect to the control socket:
 
 ```bash
 python3 examples/still_client.py
@@ -108,21 +120,21 @@ python3 examples/still_client.py
 
 | Command | Description |
 |---------|-------------|
-| `STILL [offset]` | Capture a JPEG still (offset: 0 = current frame, negative = past frame) |
-| `BURST <count> [interval_ms]` | Capture multiple consecutive stills |
-| `CLIP <start> <end>` | Extract a video clip (offsets in seconds relative to current time) |
-| `SET <key> <value>` | Modify a camera parameter at runtime (see below) |
-| `GET STATUS` | Retrieve current daemon status |
+| `STILL [offset]` | Capture JPEG (offset: 0=now, negative=past) |
+| `BURST <count> [interval_ms]` | Capture multiple stills |
+| `CLIP <start> <end>` | Extract video clip (offsets relative to now) |
+| `SET <key> <value>` | Set camera parameter (see below) |
+| `GET STATUS` | Get daemon status |
 
-**SET parameters:**
-- Camera controls (applied immediately, per-frame): `exposure`, `gain`, `brightness`, `contrast`, `sharpness`, `saturation`, `ae_enable`, `awb_enable`, `exposure_value`
-- Tuning file (triggers warm restart, approximately 0.5–1s frame gap): `SET tuning_file imx219_noir.json`
+SET parameters:
+- Camera controls (instant, per-frame): `exposure`, `gain`, `brightness`, `contrast`, `sharpness`, `saturation`, `ae_enable`, `awb_enable`, `exposure_value`
+- Tuning file (warm restart, ~0.5-1s gap): `SET tuning_file imx219_noir.json`
 
-**Clip offset examples:**
-- `CLIP -5 5` — 10-second clip spanning 5 seconds before and 5 seconds after the current time
-- `CLIP -10 0` — 10-second clip drawn entirely from the buffer
+Clip examples:
+- `CLIP -5 5` — 10 seconds: 5s before to 5s after now
+- `CLIP -10 0` — 10 seconds: all from buffer
 
-All responses are returned in JSON format:
+Responses are JSON:
 ```json
 {"ok":true,"path":"/var/ws/camerad/stills/still_20260209_173407_11.jpg"}
 {"ok":true,"data":{"running":true,"capture":{"frames":826,"fps":29.97}}}
@@ -131,7 +143,7 @@ All responses are returned in JSON format:
 
 ### Client Examples
 
-**Python client library:**
+**Python:**
 ```python
 from ws_camerad import CameraClient
 
@@ -143,13 +155,13 @@ with CameraClient() as client:
     print(response.path)
 ```
 
-**Shared memory consumer (zero-copy):**
+**Shared memory consumer:**
 ```bash
 ./frame_consumer
 python3 examples/camera_client.py frames
 ```
 
-**TCP stream (remote access):**
+**TCP stream:**
 ```bash
 ffplay tcp://raspberry-pi:8554
 ffmpeg -i tcp://raspberry-pi:8554 -c copy output.mp4
@@ -178,12 +190,12 @@ jpeg_quality = 90
 # tuning_file = imx219_noir.json
 ```
 
-## Virtual Camera Output
+## Virtual Cameras
 
-ws-camerad writes frames to v4l2loopback devices, enabling any V4L2-compatible application (OpenCV, FFmpeg, OBS, web browsers) to consume the feed as a standard video device.
+ws-camerad outputs frames to v4l2loopback devices. Any V4L2-compatible application (OpenCV, FFmpeg, OBS, browsers) can consume the feed as a standard video device.
 
 ```bash
-# Install the v4l2loopback kernel module
+# Install v4l2loopback
 sudo apt install v4l2loopback-dkms v4l2loopback-utils
 
 # Load module
@@ -207,21 +219,28 @@ height = 480
 enabled = true
 ```
 
-Virtual cameras may output at a lower resolution than the source capture. Specifying `width` and `height` per virtual camera instance enables automatic YUV420 downsampling. Omitting these values or setting them to 0 outputs frames at the full camera resolution.
+Virtual cameras can output at a lower resolution than the source. Set `width` and `height` per virtual camera to downsample the YUV420 frames automatically. Omit or set to 0 to output at full camera resolution.
 
+Performance (Pi 4, 1280×960 @ 30fps, 90° rotation):
 
-A maximum of 8 virtual camera devices is supported.
+| Virtual Cameras | Processing Time | Headroom |
+|-----------------|-----------------|----------|
+| 1 | ~11ms | 22ms |
+| 5 | ~14ms | 19ms |
+| 8 | ~17ms | 17ms |
 
-To configure persistent module loading across reboots:
+The module supports up to 8 devices. Each uses ~1.8MB at 1280×960.
+
+Persistent loading:
 
 ```bash
 echo "v4l2loopback" | sudo tee /etc/modules-load.d/v4l2loopback.conf
 echo "options v4l2loopback devices=4 video_nr=10,11,12,13" | sudo tee /etc/modprobe.d/v4l2loopback.conf
 ```
 
-## Multi-Camera Deployment
+## Multi-Camera Setup
 
-Multiple daemon instances may be run concurrently with distinct configurations. Each camera requires a unique control socket path, shared memory identifier, and RTSP port.
+Run separate daemon instances with distinct configurations. Each camera needs its own socket, shared memory name, and RTSP port.
 
 ```ini
 # /etc/ws/camerad/front_door.conf
@@ -236,7 +255,7 @@ rtsp_port = 8554
 camera_id = 0
 ```
 
-A systemd template unit simplifies management of multiple instances:
+systemd template unit:
 
 ```bash
 sudo cat > /etc/systemd/system/ws-camerad@.service << 'EOF'
@@ -259,7 +278,7 @@ sudo systemctl enable --now ws-camerad@front_door
 sudo systemctl enable --now ws-camerad@backyard
 ```
 
-Client usage with multiple cameras:
+Client usage:
 
 ```python
 from ws_camerad import CameraClient
@@ -276,9 +295,9 @@ with ThreadPoolExecutor() as pool:
     results = {name: f.result() for name, f in futures.items()}
 ```
 
-Resource consumption per instance: approximately 4–8% CPU at 1080p30, 30–50 MB memory. Practical limits on the Raspberry Pi 4: 2–3 cameras at 1080p30, or 4–6 cameras at 720p30.
+Resources per instance: ~4-8% CPU at 1080p30, 30-50 MB memory. Practical limits on Pi 4: 2-3 cameras at 1080p30, 4-6 at 720p30.
 
-To enumerate available cameras: `libcamera-hello --list-cameras`
+List cameras: `libcamera-hello --list-cameras`
 
 ## Frame Rotation
 
@@ -296,13 +315,22 @@ rotation = 90
 | 180° | ISP hardware flip | Free |
 | 90°/270° | NEON SIMD 8×8 transpose | ~7ms |
 
-The Raspberry Pi ISP natively supports only horizontal and vertical flip operations. For 90° and 270° rotations, the daemon performs software rotation of all three YUV420 planes using an ARM NEON 8×8 block transpose algorithm with parallel processing of the Y, U, and V planes.
+The Pi's ISP only supports horizontal and vertical flip. For 90°/270°, the daemon rotates all three YUV420 planes in software using ARM NEON 8×8 block transpose with parallel processing of Y, U, and V planes.
 
-All downstream consumers receive pre-rotated frames without additional processing.
+Performance at 1280×960 @ 30fps on Cortex-A72:
 
-### NoIR Camera Tuning
+| Metric | rotation=0 | rotation=90 |
+|--------|-----------|-------------|
+| CPU per frame | ~0ms (DMABUF zero-copy) | ~7ms (NEON rotate) |
+| Memory | No extra buffer | +1.8MB |
+| Encoder input | DMABUF | USERPTR |
+| Output dimensions | 1280×960 | 960×1280 |
 
-NoIR (No Infrared filter) camera modules exhibit a pink color cast under standard auto white balance settings. Dedicated tuning files correct this behavior:
+All downstream consumers receive rotated frames automatically.
+
+### NoIR Tuning
+
+For NoIR camera modules (pink tint with standard AWB):
 
 ```bash
 ws-camerad --tuning-file imx219_noir.json
@@ -313,9 +341,9 @@ Available tuning files (resolved to `/usr/share/libcamera/ipa/rpi/vc4/`):
 - `imx477_noir.json` — HQ Camera NoIR
 - `imx708_noir.json` — Camera Module v3 NoIR
 
-#### Runtime Tuning File Switching
+#### Runtime Tuning File Switch
 
-The tuning file may be changed while the daemon is running. This operation triggers a warm restart of the camera and encoder (approximately 0.5–1 second frame gap) while preserving active RTSP streams, shared memory mappings, and virtual camera devices. Connected clients experience a brief interruption followed by seamless recovery.
+The tuning file can be changed while the daemon is running. This performs a warm restart of the camera and encoder (~0.5-1s frame gap) while keeping RTSP streams, shared memory, and virtual cameras alive. Clients see a brief stall then seamless recovery.
 
 ```bash
 # Switch to NoIR profile at sunset
@@ -323,21 +351,34 @@ echo "SET tuning_file imx219_noir.json" | socat - UNIX-CONNECT:/run/ws-camerad/c
 
 # Switch back to standard profile at sunrise
 echo "SET tuning_file imx219.json" | socat - UNIX-CONNECT:/run/ws-camerad/control.sock
-
 ```
 
-## Troubleshooting
-
-### No cameras detected
-
-If `rpicam-hello --list-cameras` reports no cameras and the camera module works on another Pi, the device tree overlay files in `/boot/firmware/overlays/` may be missing or incomplete. Reinstall `raspi-firmware` to restore them:
-
+Automate with cron:
 ```bash
-sudo apt-get install --reinstall raspi-firmware
-sudo reboot
+# crontab -e
+30 6  * * * echo "SET tuning_file imx219.json" | socat - UNIX-CONNECT:/run/ws-camerad/control.sock
+30 18 * * * echo "SET tuning_file imx219_noir.json" | socat - UNIX-CONNECT:/run/ws-camerad/control.sock
 ```
 
-Also ensure `camera_auto_detect=1` and `dtparam=i2c_arm=on` are set (not commented out) in `/boot/firmware/config.txt`.
+## File Locations
+
+| Path | Purpose |
+|------|---------|
+| `/run/ws-camerad/control.sock` | Control socket |
+| `/var/ws/camerad/stills/` | JPEG stills |
+| `/var/ws/camerad/clips/` | Video clips |
+| `/etc/ws/camerad/` | Configuration |
+| `/camera_frames` | Shared memory |
+
+## Performance
+
+| Metric | Target | Typical |
+|--------|--------|---------|
+| Frame drops | 0 | 0 |
+| Capture latency | <40ms | ~33ms |
+| Still capture | <25ms | ~15ms |
+| CPU (720p30) | <15% | ~10% |
+| Memory | Bounded | ~50MB |
 
 ## License
 

@@ -10,8 +10,7 @@
 
 namespace camera_daemon {
 
-StillCapture::StillCapture(const Config& config, RawRingBuffer* raw_ring_buffer)
-    : config_(config), raw_ring_buffer_(raw_ring_buffer) {
+StillCapture::StillCapture(const Config& config) : config_(config) {
     // Ensure output directory exists
     std::filesystem::create_directories(config_.output_dir);
     
@@ -190,54 +189,11 @@ void StillCapture::worker_thread_func() {
             LOG_DEBUG("Waiting ", time_offset, "s before capturing still");
             std::this_thread::sleep_for(std::chrono::seconds(time_offset));
         }
-
-        // Handle negative time offset: retrieve from raw ring buffer
-        if (time_offset < 0 && raw_ring_buffer_) {
-            uint64_t now_us = get_timestamp_us();
-            uint64_t offset_us = static_cast<uint64_t>(-time_offset) * 1000000ULL;
-            uint64_t target_us = (now_us > offset_us) ? (now_us - offset_us) : 0;
-
-            std::vector<uint8_t> past_frame;
-            FrameMetadata past_meta;
-            if (raw_ring_buffer_->copy_nearest(target_us, past_frame, past_meta)) {
-                LOG_DEBUG("Retrieved past frame for offset ", time_offset,
-                          "s, target_ts=", target_us,
-                          ", actual_ts=", past_meta.timestamp_us);
-
-                auto start = std::chrono::steady_clock::now();
-                std::string path;
-                if (hw_jpeg_) {
-                    path = encode_jpeg_hardware(past_frame.data(), past_frame.size(),
-                                               past_meta, request.filename_prefix);
-                } else {
-                    path = encode_jpeg(past_frame.data(), past_meta,
-                                       request.filename_prefix);
-                }
-                auto end = std::chrono::steady_clock::now();
-                auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
-                total_encode_time_us_ += duration.count();
-
-                if (path.empty()) {
-                    LOG_ERROR("JPEG encoding failed for past frame");
-                    captures_failed_++;
-                } else {
-                    LOG_INFO("Past still captured: ", path, " (", duration.count() / 1000, " ms)");
-                    captures_completed_++;
-                }
-
-                {
-                    std::lock_guard<std::mutex> lock(result_mutex_);
-                    completed_captures_[request_id] = path;
-                }
-                result_cv_.notify_all();
-                continue;
-            } else {
-                LOG_WARN("No past frame available for offset ", time_offset,
-                         "s, capturing current frame instead");
-            }
-        } else if (time_offset < 0) {
-            LOG_WARN("Negative time offset (", time_offset,
-                     "s) requested but no raw ring buffer configured, capturing now");
+        // Negative time offset would require historical frame buffer
+        // For now, we capture the current frame for negative offsets too
+        // (could be enhanced with raw frame ring buffer in future)
+        else if (time_offset < 0) {
+            LOG_WARN("Negative time offset (", time_offset, "s) not yet supported for still capture, capturing now");
         }
 
         // Wait for a frame to be available

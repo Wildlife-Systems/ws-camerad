@@ -2,6 +2,7 @@
 
 #include "common.hpp"
 #include "ring_buffer.hpp"
+#include "audio_reader.hpp"
 #include <string>
 #include <thread>
 #include <atomic>
@@ -38,7 +39,8 @@ public:
         uint64_t request_timestamp;  // When the request was made
     };
 
-    explicit ClipExtractor(const Config& config, EncodedRingBuffer& ring_buffer);
+    explicit ClipExtractor(const Config& config, EncodedRingBuffer& ring_buffer,
+                           AudioReader* audio_reader = nullptr);
     ~ClipExtractor();
 
     // Non-copyable
@@ -111,6 +113,7 @@ private:
 
     Config config_;
     EncodedRingBuffer& ring_buffer_;
+    AudioReader* audio_reader_ = nullptr;
 
     std::atomic<bool> running_{false};
     std::thread dispatcher_thread_;

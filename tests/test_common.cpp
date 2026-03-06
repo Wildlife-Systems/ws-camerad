@@ -70,7 +70,6 @@ TEST(DaemonConfigTest, DefaultValues) {
     EXPECT_EQ(config.stills_dir, DEFAULT_STILLS_DIR);
     EXPECT_EQ(config.clips_dir, DEFAULT_CLIPS_DIR);
     EXPECT_EQ(config.ring_buffer_seconds, 30);
-    EXPECT_EQ(config.raw_buffer_seconds, 5);
     EXPECT_EQ(config.post_event_seconds, 10);
     EXPECT_TRUE(config.enable_rtsp);
     EXPECT_EQ(config.rtsp_port, 8554);

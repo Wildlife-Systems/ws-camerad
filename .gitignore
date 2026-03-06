@@ -1,14 +1,32 @@
-report.md
-examples/bench_motion.cpp
-examples/bench_motion.py
+# Build outputs
 build/
-obj-aarch64-linux-gnu/
+obj-*/
+
+# Debian packaging
+debian/tmp/
+debian/.debhelper/
+debian/debhelper-build-stamp
 debian/files
 debian/*.debhelper
-debian/*.debhelper.log
 debian/*.substvars
-debian/tmp/
 debian/ws-camerad/
-debian/ws-camerad-dev/
-debian/ws-camerad-examples/
-debian/python3-ws-camerad/
+
+# IDE / editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.cache/
+compile_commands.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.env/
+venv/

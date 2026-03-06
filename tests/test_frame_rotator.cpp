@@ -215,18 +215,6 @@ protected:
         auto devices = V4L2LoopbackOutput::find_loopback_devices();
         if (!devices.empty()) {
             test_device_ = devices[0];
-            // Verify the device can actually be opened exclusively
-            V4L2LoopbackOutput probe;
-            V4L2LoopbackOutput::Config probe_config;
-            probe_config.device = test_device_;
-            probe_config.width = 640;
-            probe_config.height = 480;
-            probe_config.framerate = 30;
-            if (!probe.initialize(probe_config)) {
-                test_device_.clear();  // Device busy, treat as unavailable
-            } else {
-                probe.close();
-            }
         }
     }
     

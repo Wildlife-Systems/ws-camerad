@@ -64,15 +64,9 @@ public:
     void set_frame_callback(FrameCallback callback);
 
     /**
-     * Get current camera configuration (updated to reflect actual negotiated values).
+     * Get current camera configuration.
      */
     const CameraConfig& config() const { return config_; }
-
-    /**
-     * Get the actual pixel format negotiated with the camera.
-     * May differ from requested YUV420 (e.g. YUYV or MJPEG for USB cameras).
-     */
-    uint8_t actual_pixel_format() const { return actual_pixel_format_; }
 
     /**
      * Set camera control (exposure, gain, etc.)
@@ -93,7 +87,6 @@ private:
     libcamera::Stream* stream_ = nullptr;
 
     CameraConfig config_;
-    uint8_t actual_pixel_format_ = PIXFMT_YUV420;
     FrameCallback frame_callback_;
 
     std::atomic<bool> running_{false};

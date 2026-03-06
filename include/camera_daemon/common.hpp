@@ -21,11 +21,8 @@ constexpr const char* DEFAULT_SHM_NAME = "/ws_camera_frames";
 constexpr const char* DEFAULT_BGR_SHM_NAME = "/ws_camera_frames_bgr";
 
 // Pixel format constants (used in FrameMetadata.format)
-constexpr uint8_t PIXFMT_NV12  = 0;
 constexpr uint8_t PIXFMT_YUV420 = 1;
-constexpr uint8_t PIXFMT_YUYV  = 2;
-constexpr uint8_t PIXFMT_BGR24  = 4;
-constexpr uint8_t PIXFMT_MJPEG  = 5;
+constexpr uint8_t PIXFMT_BGR24 = 4;
 
 // Frame metadata
 struct FrameMetadata {
@@ -77,8 +74,7 @@ struct DaemonConfig {
     std::string shm_name = DEFAULT_SHM_NAME;
     std::string bgr_shm_name = DEFAULT_BGR_SHM_NAME;
     
-    uint32_t ring_buffer_seconds = 30;  // Pre-event buffer (encoded)
-    uint32_t raw_buffer_seconds = 5;    // Raw frame buffer for past stills
+    uint32_t ring_buffer_seconds = 30;  // Pre-event buffer
     uint32_t post_event_seconds = 10;   // Post-event recording
     
     bool enable_rtsp = true;
@@ -90,6 +86,12 @@ struct DaemonConfig {
     // Virtual camera outputs (v4l2loopback)
     // Zero or more virtual cameras can be configured
     std::vector<VirtualCameraConfig> virtual_cameras;
+
+    // Audio recording from ws-audiod
+    bool enable_audio = false;
+    std::string audio_shm_name = "/ws_audiod_samples";
+    uint32_t audio_buffer_seconds = 60;
+    bool enable_rtsp_audio = false;  // Include audio in RTSP stream
     
     CameraConfig camera;
 };

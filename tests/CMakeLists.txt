@@ -1,12 +1,11 @@
 # Unit tests for camera_daemon
 find_package(GTest REQUIRED)
 find_package(PkgConfig REQUIRED)
-pkg_check_modules(GSTREAMER gstreamer-1.0 gstreamer-rtsp-server-1.0 gstreamer-app-1.0)
+pkg_check_modules(GSTREAMER REQUIRED gstreamer-1.0 gstreamer-rtsp-server-1.0 gstreamer-app-1.0)
 
 # Unit test sources (no hardware required)
 set(UNIT_TEST_SOURCES
     test_ring_buffer.cpp
-    test_raw_ring_buffer.cpp
     test_command.cpp
     test_common.cpp
     test_logger.cpp
@@ -17,6 +16,7 @@ set(UNIT_TEST_SOURCES
     test_integration.cpp
     test_v4l2_loopback.cpp
     test_frame_rotator.cpp
+    test_audio_reader.cpp
 )
 
 # Hardware test sources (need camera)
@@ -66,12 +66,6 @@ target_link_libraries(daemon_integration_tests
     pthread
     rt
 )
-
-# Match library's HAVE_GSTREAMER definition to avoid ODR violation
-if(GSTREAMER_FOUND)
-    target_compile_definitions(camera_daemon_tests PRIVATE HAVE_GSTREAMER)
-    target_compile_definitions(daemon_integration_tests PRIVATE HAVE_GSTREAMER)
-endif()
 
 # Add unit and hardware tests using gtest_discover
 include(GoogleTest)
