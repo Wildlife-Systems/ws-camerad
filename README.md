@@ -18,7 +18,7 @@ Only one process can own the camera. This is the fundamental problem.
 | PiCamera2 | Same process only | DIY | Yes | Python GIL limits parallelism |
 | FFmpeg | Single output | No | No | Encoder, not a daemon |
 
-ws-camerad is infrastructure, not an application. The daemon owns the camera; consumers connect via shared memory (zero-copy frames), Unix socket (control), or TCP (remote). If a consumer crashes, the daemon continues. Other consumers are unaffected.
+ws-camerad is infrastructure, not an application. The daemon owns the camera; consumers connect via shared memory (zero-copy frames), Unix socket (control), or RTSP (remote streaming). If a consumer crashes, the daemon continues. Other consumers are unaffected.
 
 Use rpicam-apps for simple capture. Use motion for a complete surveillance system. Use ws-camerad when building something custom that needs reliable camera infrastructure without reinventing it.
 
@@ -28,7 +28,7 @@ Use rpicam-apps for simple capture. Use motion for a complete surveillance syste
 - Multiple concurrent consumers (C++ and Python)
 - On-demand still capture (<25ms latency)
 - Pre/post-event video clips from rolling buffer
-- Remote streaming (TCP)
+- Remote streaming (RTSP)
 - Hardware H.264 encoding via V4L2
 - Automatic software H.264 fallback when no V4L2 M2M encoder is available
 - Zero-copy frame sharing via shared memory
@@ -47,7 +47,7 @@ Use rpicam-apps for simple capture. Use motion for a complete surveillance syste
  ┌───────────┼─────────────┬───────────────┐
  │           │             │               │
  │     Shared Memory   UNIX Socket     Network Stream
- │   (frames / H.264)   (control)        (TCP)
+ │   (frames / H.264)   (control)       (RTSP)
  │           │             │               │
 ┌▼────────┐ ┌▼────────┐ ┌──▼────────┐ ┌───▼─────────┐
 │ C++ CV  │ │ Python  │ │ CLI tools │ │ Remote      │
@@ -167,10 +167,10 @@ with CameraClient() as client:
 python3 examples/camera_client.py frames
 ```
 
-**TCP stream:**
+**RTSP stream:**
 ```bash
-ffplay tcp://raspberry-pi:8554
-ffmpeg -i tcp://raspberry-pi:8554 -c copy output.mp4
+ffplay rtsp://raspberry-pi:8554/camera
+ffmpeg -rtsp_transport tcp -i rtsp://raspberry-pi:8554/camera -c copy output.mp4
 ```
 
 ## Configuration
@@ -267,18 +267,6 @@ bitrate = 4000000
 jpeg_quality = 90
 ```
 
-Create directories and start manually:
-
-```bash
-sudo mkdir -p /run/ws-camerad \
-  /var/ws/camerad/cam0/{stills,clips} \
-  /var/ws/camerad/cam1/{stills,clips}
-sudo chown -R $USER:$USER /run/ws-camerad /var/ws/camerad
-
-nohup ws-camerad -c /etc/ws/camerad/cam0.conf > /tmp/ws_cam0.log 2>&1 &
-nohup ws-camerad -c /etc/ws/camerad/cam1.conf > /tmp/ws_cam1.log 2>&1 &
-```
-
 Optional — systemd template unit (requires a config file per instance name):
 
 ```bash
@@ -303,7 +291,7 @@ sudo systemctl enable --now ws-camerad@cam0
 sudo systemctl enable --now ws-camerad@cam1
 ```
 
-> **Note:** The installed `ws-camerad.service` unit is disabled by default. Do not enable it without a valid config at `/etc/ws/camerad/ws-camerad.conf`; use the template unit or manual startup above instead.
+> **Note:** The installed `ws-camerad.service` unit is disabled by default. Do not enable it without a valid config at `/etc/ws/camerad/ws-camerad.conf`; use the template unit above instead.
 
 Client usage:
 
