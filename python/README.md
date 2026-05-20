@@ -111,4 +111,4 @@ Examples:
 
 ## License
 
-MIT License - see LICENSE file.
+GPL-2.0-or-later - see LICENSE file.

@@ -1,6 +1,7 @@
 ws-camerad (1.1.0) unstable; urgency=medium
 
   * Latest Debian and Pi 5
+  * Change license to GPL-2+
 
  -- Ed Baker <ed@ebaker.me.uk>  Wed, 20 May 2026 13:46:44 +0100
 
