@@ -3,7 +3,6 @@
 #include "camera_daemon/logger.hpp"
 #include <fstream>
 #include <sstream>
-#include <algorithm>
 #include <getopt.h>
 
 namespace camera_daemon {
@@ -88,7 +87,8 @@ DaemonConfig load_config(const std::string& path) {
             else if (key == "enable_rtsp_audio") config.enable_rtsp_audio = (value == "true" || value == "1");
         }
         else if (section == "camera") {
-            if (key == "width") config.camera.width = std::stoul(value);
+            if (key == "camera_id") config.camera.camera_id = std::stoul(value);
+            else if (key == "width") config.camera.width = std::stoul(value);
             else if (key == "height") config.camera.height = std::stoul(value);
             else if (key == "framerate") config.camera.framerate = std::stoul(value);
             else if (key == "bitrate") config.camera.bitrate = std::stoul(value);

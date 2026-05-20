@@ -30,6 +30,7 @@ Use rpicam-apps for simple capture. Use motion for a complete surveillance syste
 - Pre/post-event video clips from rolling buffer
 - Remote streaming (TCP)
 - Hardware H.264 encoding via V4L2
+- Automatic software H.264 fallback when no V4L2 M2M encoder is available
 - Zero-copy frame sharing via shared memory
 - Frame rotation (0°/90°/180°/270°) with NEON SIMD
 - Burst capture for rapid multi-still sequences
@@ -56,11 +57,16 @@ Use rpicam-apps for simple capture. Use motion for a complete surveillance syste
 
 ## Building
 
-Dependencies (Raspberry Pi OS):
+Dependencies (Raspberry Pi OS / Raspbian):
 
 ```bash
+# Fresh image only: refresh package indexes first to avoid 404 package fetch errors.
 sudo apt update
-sudo apt install -y cmake build-essential libcamera-dev libjpeg-dev pkg-config
+
+sudo apt install -y cmake build-essential libcamera-dev libjpeg-dev pkg-config \
+    libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev libgstrtspserver-1.0-dev \
+    gstreamer1.0-rtsp gstreamer1.0-plugins-bad gstreamer1.0-libav \
+    libgtest-dev
 ```
 
 Build:
@@ -68,7 +74,7 @@ Build:
 ```bash
 mkdir build && cd build
 cmake ..
-make -j4
+make -j1
 ```
 
 Install:
@@ -76,7 +82,6 @@ Install:
 ```bash
 sudo make install
 sudo mkdir -p /var/ws/camerad/{stills,clips}
-sudo cp config/camera-daemon.service /etc/systemd/system/
 sudo systemctl daemon-reload
 ```
 
@@ -84,6 +89,7 @@ sudo systemctl daemon-reload
 
 ```bash
 # Run directly
+mkdir -p /run/ws-camerad
 ./ws-camerad
 
 # With options
@@ -243,19 +249,37 @@ echo "options v4l2loopback devices=4 video_nr=10,11,12,13" | sudo tee /etc/modpr
 Run separate daemon instances with distinct configurations. Each camera needs its own socket, shared memory name, and RTSP port.
 
 ```ini
-# /etc/ws/camerad/front_door.conf
+# /etc/ws/camerad/cam0.conf
 [daemon]
-socket_path = /run/ws-camerad/front_door.sock
-stills_dir = /var/ws/camerad/front_door/stills
-clips_dir = /var/ws/camerad/front_door/clips
-shm_name = /ws_camerad_frames_front_door
+socket_path = /run/ws-camerad/cam0.sock
+stills_dir = /var/ws/camerad/cam0/stills
+clips_dir = /var/ws/camerad/cam0/clips
+shm_name = /ws_camerad_frames_cam0
+enable_rtsp = true
 rtsp_port = 8554
 
 [camera]
 camera_id = 0
+width = 1280
+height = 960
+framerate = 30
+bitrate = 4000000
+jpeg_quality = 90
 ```
 
-systemd template unit:
+Create directories and start manually:
+
+```bash
+sudo mkdir -p /run/ws-camerad \
+  /var/ws/camerad/cam0/{stills,clips} \
+  /var/ws/camerad/cam1/{stills,clips}
+sudo chown -R $USER:$USER /run/ws-camerad /var/ws/camerad
+
+nohup ws-camerad -c /etc/ws/camerad/cam0.conf > /tmp/ws_cam0.log 2>&1 &
+nohup ws-camerad -c /etc/ws/camerad/cam1.conf > /tmp/ws_cam1.log 2>&1 &
+```
+
+Optional — systemd template unit (requires a config file per instance name):
 
 ```bash
 sudo cat > /etc/systemd/system/ws-camerad@.service << 'EOF'
@@ -266,7 +290,7 @@ After=network.target
 [Service]
 Type=simple
 ExecStart=/usr/bin/ws-camerad -c /etc/ws/camerad/%i.conf
-Restart=always
+Restart=on-failure
 RestartSec=5
 
 [Install]
@@ -274,9 +298,12 @@ WantedBy=multi-user.target
 EOF
 
 sudo systemctl daemon-reload
-sudo systemctl enable --now ws-camerad@front_door
-sudo systemctl enable --now ws-camerad@backyard
+# Enable only when config files are in place:
+sudo systemctl enable --now ws-camerad@cam0
+sudo systemctl enable --now ws-camerad@cam1
 ```
+
+> **Note:** The installed `ws-camerad.service` unit is disabled by default. Do not enable it without a valid config at `/etc/ws/camerad/ws-camerad.conf`; use the template unit or manual startup above instead.
 
 Client usage:
 

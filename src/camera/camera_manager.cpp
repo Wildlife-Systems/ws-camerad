@@ -25,10 +25,10 @@ CameraManager::~CameraManager() {
 }
 
 bool CameraManager::initialize() {
-    return initialize("");
+    return initialize("", 0);
 }
 
-bool CameraManager::initialize(const std::string& tuning_file) {
+bool CameraManager::initialize(const std::string& tuning_file, uint32_t camera_index) {
     LOG_INFO("Initializing camera manager");
     
     // Set tuning file for NoIR or other specialized camera modules
@@ -61,9 +61,13 @@ bool CameraManager::initialize(const std::string& tuning_file) {
     }
 
     LOG_INFO("Found ", cameras.size(), " camera(s)");
-    
-    // Use the first available camera
-    camera_ = cameras[0];
+
+    if (camera_index >= cameras.size()) {
+        LOG_ERROR("Requested camera_id ", camera_index, " out of range (0-", cameras.size() - 1, ")");
+        return false;
+    }
+
+    camera_ = cameras[camera_index];
     
     ret = camera_->acquire();
     if (ret != 0) {
@@ -71,7 +75,7 @@ bool CameraManager::initialize(const std::string& tuning_file) {
         return false;
     }
 
-    LOG_INFO("Acquired camera: ", camera_->id());
+    LOG_INFO("Acquired camera[", camera_index, "]: ", camera_->id());
     return true;
 }
 
@@ -330,7 +334,7 @@ void CameraManager::process_frame(libcamera::FrameBuffer* buffer, const libcamer
     LOG_DEBUG("Frame ", fm.sequence, ": ", fm.width, "x", fm.height, " stride=", actual_stride);
 
     // Calculate total size and map the buffer
-    const std::vector<libcamera::FrameBuffer::Plane>& planes = buffer->planes();
+    const auto& planes = buffer->planes();
     
     void* mapped_mem = nullptr;
     size_t mapped_size = 0;

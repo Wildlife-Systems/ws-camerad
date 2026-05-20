@@ -45,6 +45,7 @@ struct EncodedFrame {
 
 // Camera configuration
 struct CameraConfig {
+    uint32_t camera_id = 0;    // Index of camera to use when multiple are present
     uint32_t width = 1280;
     uint32_t height = 960; 
     uint32_t framerate = 30;

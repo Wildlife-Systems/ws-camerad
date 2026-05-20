@@ -188,7 +188,7 @@ bool CapturePipeline::initialize() {
 
     // Create camera manager
     camera_manager_ = std::make_unique<CameraManager>();
-    if (!camera_manager_->initialize(config_.camera.tuning_file)) {
+    if (!camera_manager_->initialize(config_.camera.tuning_file, config_.camera.camera_id)) {
         LOG_ERROR("Failed to initialize camera manager");
         return false;
     }
@@ -576,7 +576,7 @@ bool CapturePipeline::restart_camera(const std::string& new_tuning_file) {
 
     // 5. Rebuild camera manager with new tuning file
     camera_manager_ = std::make_unique<CameraManager>();
-    if (!camera_manager_->initialize(config_.camera.tuning_file)) {
+    if (!camera_manager_->initialize(config_.camera.tuning_file, config_.camera.camera_id)) {
         LOG_ERROR("Warm restart failed: camera init");
         return false;
     }

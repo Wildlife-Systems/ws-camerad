@@ -1,5 +1,6 @@
 #include "camera_daemon/rtsp_server.hpp"
 #include "camera_daemon/logger.hpp"
+#include <algorithm>
 #include <cstring>
 #include <memory>
 

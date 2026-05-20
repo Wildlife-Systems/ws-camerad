@@ -1,5 +1,6 @@
 #include "camera_daemon/clip_extractor.hpp"
 #include "camera_daemon/logger.hpp"
+#include <algorithm>
 #include <fstream>
 #include <filesystem>
 

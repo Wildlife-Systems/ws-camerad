@@ -95,16 +95,26 @@ public:
     Stats get_stats() const;
 
 private:
+    enum class Backend {
+        HardwareV4L2,
+        SoftwareGStreamer
+    };
+
     bool open_device();
     bool setup_input_format();
     bool setup_output_format();
     bool setup_controls();
     bool allocate_buffers();
     bool start_streaming();
+    bool initialize_software_encoder();
+    bool encode_frame_software(const uint8_t* data, size_t size, uint64_t timestamp);
+    void drain_software_output();
+    void cleanup_software_encoder();
 
     void output_thread_func();
     void dequeue_output_buffer();
 
+    Backend backend_ = Backend::HardwareV4L2;
     int fd_ = -1;
     Config config_;
     EncodedFrameCallback output_callback_;
@@ -129,6 +139,12 @@ private:
         bool queued;
     };
     std::vector<OutputBuffer> output_buffers_;
+
+    // GStreamer software encoder pipeline handles (stored as opaque pointers to
+    // keep this public header free of GStreamer includes).
+    void* sw_pipeline_ = nullptr;
+    void* sw_appsrc_ = nullptr;
+    void* sw_appsink_ = nullptr;
 
     std::thread output_thread_;
 

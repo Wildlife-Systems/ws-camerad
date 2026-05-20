@@ -19,8 +19,8 @@ find_package(PkgConfig REQUIRED)
 pkg_check_modules(LIBCAMERA REQUIRED libcamera)
 pkg_check_modules(LIBJPEG REQUIRED libjpeg)
 
-# Required: Find GStreamer for RTSP
-pkg_check_modules(GSTREAMER REQUIRED gstreamer-1.0 gstreamer-rtsp-server-1.0 gstreamer-app-1.0)
+# Required: Find GStreamer for RTSP and software encoder fallback
+pkg_check_modules(GSTREAMER REQUIRED gstreamer-1.0 gstreamer-rtsp-server-1.0 gstreamer-app-1.0 gstreamer-video-1.0)
 
 # Include directories
 include_directories(

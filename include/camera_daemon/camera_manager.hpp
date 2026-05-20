@@ -36,7 +36,7 @@ public:
      * @param tuning_file Tuning filename or full path (empty = auto-detect)
      * @return true on success
      */
-    bool initialize(const std::string& tuning_file);
+    bool initialize(const std::string& tuning_file, uint32_t camera_index = 0);
 
     /**
      * Configure the camera with specified settings.
