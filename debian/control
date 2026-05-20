@@ -19,7 +19,7 @@ Package: ws-camerad
 Architecture: any
 Depends: ${shlibs:Depends},
          ${misc:Depends},
-         libcamera0.2 | libcamera0.3 | libcamera0.5,
+         libcamera0.2 | libcamera0.3 | libcamera0.5 | libcamera0.7,
          libjpeg62-turbo | libjpeg9,
          gstreamer1.0-plugins-base,
          gstreamer1.0-plugins-good,
