@@ -81,9 +81,13 @@ Install:
 
 ```bash
 sudo make install
-sudo mkdir -p /var/ws/camerad/{stills,clips}
+sudo mkdir -p /var/lib/ws-camerad/{stills,clips}
 sudo systemctl daemon-reload
 ```
+
+Best practice:
+- Use `/etc/ws/camerad/ws-camerad.conf` as the source of truth for paths and runtime options.
+- Prefer running via systemd for production (`ws-camerad.service` for single camera, `ws-camerad@.service` for multi-camera).
 
 ## Usage
 
@@ -111,6 +115,8 @@ sudo systemctl start ws-camerad
 | `-b, --bitrate` | Bitrate (default: 4000000) |
 | `-t, --tuning-file` | Tuning file for NoIR modules |
 | `-o, --rotation` | Frame rotation (0, 90, 180, 270) |
+| `--hflip` | Horizontal flip (mirror) |
+| `--vflip` | Vertical flip |
 | `-r, --rtsp-port` | RTSP server port (default: 8554) |
 | `-R, --no-rtsp` | Disable RTSP streaming |
 | `-d, --debug` | Enable debug logging |
@@ -142,7 +148,7 @@ Clip examples:
 
 Responses are JSON:
 ```json
-{"ok":true,"path":"/var/ws/camerad/stills/still_20260209_173407_11.jpg"}
+{"ok":true,"path":"/var/lib/ws-camerad/stills/still_20260209_173407_11.jpg"}
 {"ok":true,"data":{"running":true,"capture":{"frames":826,"fps":29.97}}}
 {"ok":false,"error":"Invalid command"}
 ```
@@ -164,7 +170,7 @@ with CameraClient() as client:
 **Shared memory consumer:**
 ```bash
 ./frame_consumer
-python3 examples/camera_client.py frames
+python3 examples/opencv_analysis.py --stats
 ```
 
 **RTSP stream:**
@@ -180,8 +186,8 @@ ffmpeg -rtsp_transport tcp -i rtsp://raspberry-pi:8554/camera -c copy output.mp4
 ```ini
 [daemon]
 socket_path = /run/ws-camerad/control.sock
-stills_dir = /var/ws/camerad/stills
-clips_dir = /var/ws/camerad/clips
+stills_dir = /var/lib/ws-camerad/stills
+clips_dir = /var/lib/ws-camerad/clips
 ring_buffer_seconds = 30
 enable_rtsp = true
 rtsp_port = 8554
@@ -252,8 +258,8 @@ Run separate daemon instances with distinct configurations. Each camera needs it
 # /etc/ws/camerad/cam0.conf
 [daemon]
 socket_path = /run/ws-camerad/cam0.sock
-stills_dir = /var/ws/camerad/cam0/stills
-clips_dir = /var/ws/camerad/cam0/clips
+stills_dir = /var/lib/ws-camerad/cam0/stills
+clips_dir = /var/lib/ws-camerad/cam0/clips
 shm_name = /ws_camerad_frames_cam0
 enable_rtsp = true
 rtsp_port = 8554
@@ -293,6 +299,21 @@ sudo systemctl enable --now ws-camerad@cam1
 
 > **Note:** The installed `ws-camerad.service` unit is disabled by default. Do not enable it without a valid config at `/etc/ws/camerad/ws-camerad.conf`; use the template unit above instead.
 
+### Control Socket Behavior (Multiple Cameras)
+
+Each daemon instance exposes its own Unix control socket. Commands sent to one socket affect only that camera instance.
+
+- `cam0` instance listens on `/run/ws-camerad/cam0.sock`
+- `cam1` instance listens on `/run/ws-camerad/cam1.sock`
+- There is no shared global control socket in multi-camera mode unless you configure multiple instances to use the same path (not recommended)
+
+Example: query each camera independently
+
+```bash
+echo "GET STATUS" | socat - UNIX-CONNECT:/run/ws-camerad/cam0.sock
+echo "GET STATUS" | socat - UNIX-CONNECT:/run/ws-camerad/cam1.sock
+```
+
 Client usage:
 
 ```python
@@ -300,8 +321,8 @@ from ws_camerad import CameraClient
 from concurrent.futures import ThreadPoolExecutor
 
 cameras = {
-    "front_door": CameraClient("/run/ws-camerad/front_door.sock"),
-    "backyard": CameraClient("/run/ws-camerad/backyard.sock"),
+    "cam0": CameraClient("/run/ws-camerad/cam0.sock"),
+    "cam1": CameraClient("/run/ws-camerad/cam1.sock"),
 }
 
 # Capture from all cameras in parallel
@@ -366,6 +387,8 @@ echo "SET tuning_file imx219_noir.json" | socat - UNIX-CONNECT:/run/ws-camerad/c
 
 # Switch back to standard profile at sunrise
 echo "SET tuning_file imx219.json" | socat - UNIX-CONNECT:/run/ws-camerad/control.sock
+
+# Multi-camera: send to the instance socket, e.g. /run/ws-camerad/cam0.sock
 ```
 
 Automate with cron:
@@ -380,10 +403,11 @@ Automate with cron:
 | Path | Purpose |
 |------|---------|
 | `/run/ws-camerad/control.sock` | Control socket |
-| `/var/ws/camerad/stills/` | JPEG stills |
-| `/var/ws/camerad/clips/` | Video clips |
+| `/var/lib/ws-camerad/stills/` | JPEG stills (default packaged config) |
+| `/var/lib/ws-camerad/clips/` | Video clips (default packaged config) |
 | `/etc/ws/camerad/` | Configuration |
-| `/camera_frames` | Shared memory |
+| `/ws_camerad_frames` | Raw-frame shared memory |
+| `/ws_camerad_frames_bgr` | BGR shared memory |
 
 ## Performance
 
